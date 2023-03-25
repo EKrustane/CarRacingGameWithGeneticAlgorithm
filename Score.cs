@@ -10,7 +10,7 @@ namespace CarRacingGameWithGeneticAlgorithm
 {
     public class Score : Label
     {
-        public int score;
+        public int scoreNumber;
 
         public Score()
         {
@@ -20,9 +20,15 @@ namespace CarRacingGameWithGeneticAlgorithm
         private void InitializeScore()
         {
             this.BackColor = Color.Transparent;
-            this.Size = new Size(50, 15);
-            this.Location = new Point(10, 10);
-            this.Text = "Score: " + score;
+            this.Size = new Size(150, 100);
+            this.Location = new Point(230, 15);
+            this.Font = new Font("Century Gothic", 18, FontStyle.Bold);
+        }
+
+        public void UpdatingScore(int score)
+        {
+            scoreNumber += score;
+            this.Text = "Score: " + scoreNumber.ToString();
         }
     }
 }

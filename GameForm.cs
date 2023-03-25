@@ -18,26 +18,33 @@ namespace CarRacingGameWithGeneticAlgorithm
         private Area area = new Area();
         private Vehicle vehicle = new Vehicle();
         private Score score = new Score();
+        private List<Obstacle> obstacles = new List<Obstacle>();
         private GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
         private Button buttonStart = new Button();
         private Button buttonNew = new Button();
         private Button buttonNext = new Button();
         private bool buttonStartClick = false;
         private Timer ifButtonIsClickedTimer = null;
-        private Timer gravityTimer = null;
-        private int groundValue = 500;
+        private Timer mainTimer = null;
+        private Timer obstacleTimer = null;
+        private Timer gameOverTimer = null;
+        private int obstacleCount = 1;
+        private Random rand = new Random();
+
 
 
         public CarRacingGame()
         {
             InitializeComponent();
+            KeyPreview = true;
             InitializeGame();
+            //InitializeMainTimer();
         }
 
         private void InitializeGame()
         {
             //adjust game form size
-            this.Size = new Size(5300, 530);
+            this.Size = new Size(615, 825);
 
             //add start picture
             InitializeStartPicture();
@@ -45,26 +52,25 @@ namespace CarRacingGameWithGeneticAlgorithm
             //add game elements, when Start button is clicked
             InitializeIfButtonIsClickedTimer();
 
-
-
         }
+
 
         private void InitializeStartPicture()
         {
             this.Controls.Add(startPicture);
             startPicture.Visible = true;
             startPicture.Location = new Point(0, 0);
-            startPicture.Size = new Size(800, 500);
+            startPicture.Size = new Size(600, 800);
             startPicture.SizeMode = PictureBoxSizeMode.StretchImage;
             startPicture.BringToFront();
-            startPicture.Image = (Image)Properties.Resources.ResourceManager.GetObject("start_pic");
+            startPicture.Image = (Image)Properties.Resources.ResourceManager.GetObject("start_picture");
             ButtonStart();
         }
         private void ButtonStart()
         {
             buttonStart.Parent = startPicture;
-            buttonStart.Size = new Size(156, 46);
-            buttonStart.Location = new Point(336, 426);
+            buttonStart.Size = new Size(160, 50);
+            buttonStart.Location = new Point(220, 640);
             buttonStart.BackColor = Color.Black;
             buttonStart.ForeColor = Color.White;
             buttonStart.Text = "START";
@@ -101,6 +107,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 ifButtonIsClickedTimer.Stop();
                 VisibleFalse();
                 AddGameElements();
+                
             }
 
         }
@@ -109,10 +116,11 @@ namespace CarRacingGameWithGeneticAlgorithm
         {
             //add key down event handler
             //this.KeyDown += Game_KeyDown;
+            this.KeyDown += new KeyEventHandler(this.Game_KeyDown);
 
             //inicialize and add area
             AddArea();
-            //groundValue = area.point.Y + 200;
+
             //adding vehicle to the game
             AddVehicle();
 
@@ -122,49 +130,45 @@ namespace CarRacingGameWithGeneticAlgorithm
             //adding GA to the game
             AddGeneticAlgorithm();
 
+            AddObstacle();
+
             //UpdateScoreLabel();
 
+            InitializeMainTimer();
+            InitializeObstacleTimer();
+
+        }
+        private void InitializeMainTimer()
+        {
+            mainTimer = new Timer();
+            mainTimer.Tick += MainTimer_Tick;
+            mainTimer.Interval = 40;
+            mainTimer.Start();
         }
 
-        /*private void Game_KeyDown(object sender, KeyEventArgs e)
+        private void MainTimer_Tick(object sender, EventArgs e)
         {
-            switch (e.KeyCode)
-            {
-                case Keys.Right:
-                    vehicle.HorizontalVelocity = vehicle.Step;
-                    if()
-                    {
-                        vehicle.VerticalVelocityRight = vehicle.Step - 1;
-                        vehicle.VerticalVelocityLeft = -vehicle.Step + 1;
-                    }
-                    else if()
-                    {
-                        vehicle.VerticalVelocityLeft = vehicle.Step - 1;
-                        vehicle.VerticalVelocityRight = -vehicle.Step + 1;
-                    }
-                    break;
-                case Keys.Left:
-                    vehicle.HorizontalVelocity = -vehicle.Step;
-                    if ()
-                    {
-                        vehicle.VerticalVelocityLeft = vehicle.Step - 1;
-                        vehicle.VerticalVelocityRight = -vehicle.Step + 1;
-                    }
-                    else if()
-                    {
-                        vehicle.VerticalVelocityRight = vehicle.Step - 1;
-                        vehicle.VerticalVelocityLeft = -vehicle.Step + 1;
-                        
-                    }
-                    
-                    break;
-            }
-        }*/
+            MoveObstacle();
+            VehicleObstacleCollision();
+            UpdateScore();
+        }
+
+        private void InitializeObstacleTimer()
+        {
+            obstacleTimer = new Timer();
+            obstacleTimer.Tick += obstacleTimer_Tick;
+            obstacleTimer.Interval = 3000;
+            obstacleTimer.Start();
+        }
+
+        private void obstacleTimer_Tick(object sender, EventArgs e)
+        {
+            AddObstacle();
+        }
 
         private void AddArea()
         {
             this.Controls.Add(area);
-            //area.BringToFront();
         }
 
         private void AddVehicle()
@@ -172,7 +176,6 @@ namespace CarRacingGameWithGeneticAlgorithm
             this.Controls.Add(vehicle);
             vehicle.Parent = area;
             vehicle.BringToFront();
-
         }
 
         private void AddScore()
@@ -187,15 +190,112 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         }
 
+        private void AddObstacle()
+        {
+            Obstacle obstacle;
+            for (int i = 0; i < obstacleCount; i++)
+            {
+                obstacle = new Obstacle();
+                obstacle.Location = new Point(rand.Next(100, 500), 100);
+                obstacles.Add(obstacle);
+                this.Controls.Add(obstacle);
+                obstacle.Parent = area;
+                obstacle.BringToFront();
+            }
+        }
+
+        private void Game_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Right:
+                    vehicle.HorizontalControl = vehicle.Step;
+                    vehicle.Left += vehicle.HorizontalControl;
+                    VehicleBorderCollision();
+                    break;
+                case Keys.Left:
+                    vehicle.HorizontalControl = -vehicle.Step;
+                    vehicle.Left += vehicle.HorizontalControl;
+                    VehicleBorderCollision();
+                    break;
+            }
+        }
+
+
+        private void UpdateScore()
+        {
+            score.UpdatingScore(1);
+        }
+
+        private void MoveObstacle()
+        {
+            foreach (var obstacle in obstacles)
+            {
+                obstacle.VerticalControl = obstacle.Step;
+                obstacle.Top += obstacle.VerticalControl;
+            }
+        }
+
+        private void VehicleBorderCollision()
+        {
+            if (vehicle.Left + vehicle.Width >= area.Width - 30)
+            {
+                GameOver();
+            }
+            if (vehicle.Left <= area.Left + 40)
+            {
+                GameOver();
+            }
+            
+        }
+
+        private void VehicleObstacleCollision()
+        {
+            Obstacle obstacle;
+            for (int obstacleCounter = 0; obstacleCounter < obstacles.Count; obstacleCounter++)
+            {
+                obstacle = obstacles[obstacleCounter];
+                if (obstacle.Bounds.IntersectsWith(vehicle.Bounds))
+                {
+                    InitializeGameOverTimer();
+                }
+            }
+
+        }
+
+        private void InitializeGameOverTimer()
+        {
+            gameOverTimer = new Timer();
+            gameOverTimer.Tick += GameOverTimer_Tick;
+            gameOverTimer.Interval = 10;
+            gameOverTimer.Start();
+        }
+
+        private void GameOverTimer_Tick(object sender, EventArgs e)
+        {
+            gameOverTimer.Stop();
+            obstacleTimer.Stop();
+            mainTimer.Stop();
+            GameOver();
+        }
+
+        public void GameOver()
+        {
+            InitializeEndPicture();
+        }
+
         private void InitializeEndPicture()
         {
+            this.Controls.Add(endPicture);
+            endPicture.Image = (Image)Properties.Resources.ResourceManager.GetObject("end_picture");
             endPicture.Visible = true;
+            endPicture.BringToFront();
             endPicture.Location = new Point(0, 0);
             endPicture.Size = area.Size;
             endPicture.SizeMode = PictureBoxSizeMode.StretchImage;
-            endPicture.BringToFront();
-            ButtonNew();
-            ButtonNext();
+            //ButtonNew();
+            //ButtonNext();
+            //ButtonClose();
         }
 
         private void ButtonNew()
@@ -216,23 +316,37 @@ namespace CarRacingGameWithGeneticAlgorithm
             buttonNext.BringToFront();
         }
 
+        private void ButtonClose()
+        {
+            buttonNext.Parent = endPicture;
+            buttonNext.Size = new Size(80, 40);
+            buttonNext.Location = new Point(215, 300);
+            buttonNext.Visible = true;
+            buttonNext.BringToFront();
+        }
+
         private void buttonNew_Click(object sender, EventArgs e)
         {
-            //RestartGame();
+            RestartGame();
         }
 
         private void buttonNext_Click(object sender, EventArgs e)
         {
-            //this.Close();
+            
         }
 
-        private void MoveVehicle()
+        private void buttonClose_Click(object sender, EventArgs e)
         {
-            //vehicle.Right += vehicle.HorizontalVelocity;
-            //vehicle.Left -= vehicle.VerticalVelocity;
+            this.Close();
+        }
+
+        private void RestartGame()
+        {
+            System.Diagnostics.Process.Start(Application.ExecutablePath);
+            this.Close();
         }
     }
 
 
-    }
+
 }
