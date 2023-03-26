@@ -23,6 +23,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         private Button buttonStart = new Button();
         private Button buttonNew = new Button();
         private Button buttonNext = new Button();
+        private Button buttonClose = new Button();
         private bool buttonStartClick = false;
         private Timer ifButtonIsClickedTimer = null;
         private Timer mainTimer = null;
@@ -293,36 +294,51 @@ namespace CarRacingGameWithGeneticAlgorithm
             endPicture.Location = new Point(0, 0);
             endPicture.Size = area.Size;
             endPicture.SizeMode = PictureBoxSizeMode.StretchImage;
-            //ButtonNew();
-            //ButtonNext();
-            //ButtonClose();
+            ButtonNew();
+            ButtonNext();
+            ButtonClose();
         }
 
         private void ButtonNew()
         {
             buttonNew.Parent = endPicture;
-            buttonNew.Size = new Size(80, 40);
-            buttonNew.Location = new Point(120, 300);
+            buttonNew.Size = new Size(100, 40);
+            buttonNew.Location = new Point(250, 730);
             buttonNew.Visible = true;
+            buttonNew.BackColor = Color.Black;
+            buttonNew.ForeColor = Color.White;
+            buttonNew.Text = "New";
+            buttonNew.Font = new Font("Impact", 20, FontStyle.Bold);
             buttonNew.BringToFront();
+            buttonNew.Click += buttonNew_Click;
         }
 
         private void ButtonNext()
         {
             buttonNext.Parent = endPicture;
-            buttonNext.Size = new Size(80, 40);
-            buttonNext.Location = new Point(215, 300);
+            buttonNext.Size = new Size(100, 40);
+            buttonNext.Location = new Point(120, 730);
             buttonNext.Visible = true;
+            buttonNext.BackColor = Color.Black;
+            buttonNext.ForeColor = Color.White;
+            buttonNext.Text = "Next";
+            buttonNext.Font = new Font("Impact", 20, FontStyle.Bold);
             buttonNext.BringToFront();
+            buttonNext.Click += buttonNext_Click;
         }
 
         private void ButtonClose()
         {
-            buttonNext.Parent = endPicture;
-            buttonNext.Size = new Size(80, 40);
-            buttonNext.Location = new Point(215, 300);
-            buttonNext.Visible = true;
-            buttonNext.BringToFront();
+            buttonClose.Parent = endPicture;
+            buttonClose.Size = new Size(100, 40);
+            buttonClose.Location = new Point(380, 730);
+            buttonClose.Visible = true;
+            buttonClose.BackColor = Color.Black;
+            buttonClose.ForeColor = Color.White;
+            buttonClose.Text = "Close";
+            buttonClose.Font = new Font("Impact", 20, FontStyle.Bold);
+            buttonClose.BringToFront();
+            buttonClose.Click += buttonClose_Click;
         }
 
         private void buttonNew_Click(object sender, EventArgs e)
