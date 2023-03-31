@@ -8,6 +8,7 @@ using System.Drawing;
 
 namespace CarRacingGameWithGeneticAlgorithm
 {
+
     class GeneticAlgorithm
     {
     }

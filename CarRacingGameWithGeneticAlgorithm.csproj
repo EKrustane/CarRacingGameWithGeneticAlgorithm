@@ -71,6 +71,7 @@
       <DependentUpon>GameForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GeneticAlgorithm.cs" />
+    <Compile Include="NeuralNetwork.cs" />
     <Compile Include="Obstacle.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -18,8 +18,10 @@ namespace CarRacingGameWithGeneticAlgorithm
         private Area area = new Area();
         private Vehicle vehicle = new Vehicle();
         private Score score = new Score();
+        private Obstacle obstacle;
         private List<Obstacle> obstacles = new List<Obstacle>();
         private GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
+        private NeuralNetwork neuralNetwork = new NeuralNetwork();
         private Button buttonStart = new Button();
         private Button buttonNew = new Button();
         private Button buttonNext = new Button();
@@ -115,26 +117,13 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         private void AddGameElements()
         {
-            //add key down event handler
-            //this.KeyDown += Game_KeyDown;
             this.KeyDown += new KeyEventHandler(this.Game_KeyDown);
-
-            //inicialize and add area
             AddArea();
-
-            //adding vehicle to the game
             AddVehicle();
-
-            //adding score to the game
             AddScore();
-
-            //adding GA to the game
-            AddGeneticAlgorithm();
-
             AddObstacle();
-
-            //UpdateScoreLabel();
-
+            AddGeneticAlgorithm();
+            AddNeuralNetwork();
             InitializeMainTimer();
             InitializeObstacleTimer();
 
@@ -191,9 +180,27 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         }
 
+        private void AddNeuralNetwork()
+        {
+            int x1, x2, x3, x4;
+            x1 = area.Width - 30 - (vehicle.Location.X + vehicle.Width);
+            x2 = vehicle.Location.X + 30;
+            x3 = vehicle.Location.Y - (obstacle.Location.Y + obstacle.Height);
+            x4 = vehicle.Location.X - (obstacle.Location.X + obstacle.Width);
+            if (x4 < 0)
+            {
+                x4 = obstacle.Location.X - (vehicle.Location.X + vehicle.Width);
+                if (x4 < 0)
+                {
+                    x4 = 0;
+                }
+            }
+            neuralNetwork.setInputData(x1, x2, x3, x4);
+        }
+
         private void AddObstacle()
         {
-            Obstacle obstacle;
+            
             for (int i = 0; i < obstacleCount; i++)
             {
                 obstacle = new Obstacle();
@@ -241,11 +248,11 @@ namespace CarRacingGameWithGeneticAlgorithm
         {
             if (vehicle.Left + vehicle.Width >= area.Width - 30)
             {
-                GameOver();
+                InitializeGameOverTimer();
             }
-            if (vehicle.Left <= area.Left + 40)
+            if (vehicle.Left <= area.Left + 30)
             {
-                GameOver();
+                InitializeGameOverTimer();
             }
             
         }
