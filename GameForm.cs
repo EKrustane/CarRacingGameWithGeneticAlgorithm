@@ -182,20 +182,20 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         private void AddNeuralNetwork()
         {
-            int x1, x2, x3, x4;
-            x1 = area.Width - 30 - (vehicle.Location.X + vehicle.Width);
-            x2 = vehicle.Location.X + 30;
-            x3 = vehicle.Location.Y - (obstacle.Location.Y + obstacle.Height);
-            x4 = vehicle.Location.X - (obstacle.Location.X + obstacle.Width);
-            if (x4 < 0)
+            int x0, x1, x2, x3;
+            x0 = area.Width - 30 - (vehicle.Location.X + vehicle.Width);
+            x1 = vehicle.Location.X + 30;
+            x2 = vehicle.Location.Y - (obstacle.Location.Y + obstacle.Height);
+            x3 = vehicle.Location.X - (obstacle.Location.X + obstacle.Width);
+            if (x3 < 0)
             {
-                x4 = obstacle.Location.X - (vehicle.Location.X + vehicle.Width);
-                if (x4 < 0)
+                x3 = obstacle.Location.X - (vehicle.Location.X + vehicle.Width);
+                if (x3 < 0)
                 {
-                    x4 = 0;
+                    x3 = 0;
                 }
             }
-            neuralNetwork.setInputData(x1, x2, x3, x4);
+            neuralNetwork.setInputData(x0, x1, x2, x3);
         }
 
         private void AddObstacle()
