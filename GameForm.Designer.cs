@@ -36,6 +36,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Location = new System.Drawing.Point(100, 100);
             this.Name = "CarRacingGame";
             this.Text = "Car Racing Game with Genetic Algorithm";
             this.ResumeLayout(false);

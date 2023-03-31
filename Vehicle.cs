@@ -13,6 +13,8 @@ namespace CarRacingGameWithGeneticAlgorithm
         public int Step { get; set; } = 20;
         public int HorizontalControl { get; set; } = 0;
 
+        private Random rand = new Random();
+
         public Vehicle()
         {
             InitializeVehicle();

@@ -16,12 +16,14 @@ namespace CarRacingGameWithGeneticAlgorithm
         private PictureBox startPicture = new PictureBox();
         private PictureBox endPicture = new PictureBox();
         private Area area = new Area();
-        private Vehicle vehicle = new Vehicle();
+        private Vehicle vehicle;
+        private List<Vehicle> vehicles = new List<Vehicle>();
         private Score score = new Score();
         private Obstacle obstacle;
         private List<Obstacle> obstacles = new List<Obstacle>();
         private GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
-        private NeuralNetwork neuralNetwork = new NeuralNetwork();
+        private NeuralNetwork neuralNetwork;
+        
         private Button buttonStart = new Button();
         private Button buttonNew = new Button();
         private Button buttonNext = new Button();
@@ -30,9 +32,11 @@ namespace CarRacingGameWithGeneticAlgorithm
         private Timer ifButtonIsClickedTimer = null;
         private Timer mainTimer = null;
         private Timer obstacleTimer = null;
+        private Timer neuralNetworkTimer = null;
         private Timer gameOverTimer = null;
         private int obstacleCount = 1;
         private Random rand = new Random();
+        
 
 
 
@@ -118,14 +122,17 @@ namespace CarRacingGameWithGeneticAlgorithm
         private void AddGameElements()
         {
             this.KeyDown += new KeyEventHandler(this.Game_KeyDown);
+            
             AddArea();
             AddVehicle();
             AddScore();
             AddObstacle();
             AddGeneticAlgorithm();
-            AddNeuralNetwork();
+            
             InitializeMainTimer();
             InitializeObstacleTimer();
+            //InitializeNeuralNetworkTimer();
+            //AddNeuralNetwork();
 
         }
         private void InitializeMainTimer()
@@ -138,7 +145,9 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         private void MainTimer_Tick(object sender, EventArgs e)
         {
+            
             MoveObstacle();
+            //VehicleBorderCollision();
             VehicleObstacleCollision();
             UpdateScore();
         }
@@ -156,6 +165,19 @@ namespace CarRacingGameWithGeneticAlgorithm
             AddObstacle();
         }
 
+        private void InitializeNeuralNetworkTimer()
+        {
+            neuralNetworkTimer = new Timer();
+            neuralNetworkTimer.Tick += neuralNetworkTimer_Tick;
+            neuralNetworkTimer.Interval = 500;
+            neuralNetworkTimer.Start();
+        }
+
+        private void neuralNetworkTimer_Tick(object sender, EventArgs e)
+        {
+            
+        }
+
         private void AddArea()
         {
             this.Controls.Add(area);
@@ -163,10 +185,31 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         private void AddVehicle()
         {
-            this.Controls.Add(vehicle);
-            vehicle.Parent = area;
-            vehicle.BringToFront();
+            for (int i = 0; i < 6; i++)
+            {
+                vehicle = new Vehicle();
+                
+                vehicles.Add(vehicle);
+                this.Controls.Add(vehicle);
+                vehicle.Parent = area;
+                vehicle.BringToFront();
+            }
         }
+
+        private void AddObstacle()
+        {
+
+            for (int i = 0; i < obstacleCount; i++)
+            {
+                obstacle = new Obstacle();
+                obstacle.Location = new Point(rand.Next(100, 500), 100);
+                obstacles.Add(obstacle);
+                this.Controls.Add(obstacle);
+                obstacle.Parent = area;
+                obstacle.BringToFront();
+            }
+        }
+
 
         private void AddScore()
         {
@@ -182,33 +225,44 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         private void AddNeuralNetwork()
         {
-            int x1, x2, x3, x4;
-            x1 = area.Width - 30 - (vehicle.Location.X + vehicle.Width);
-            x2 = vehicle.Location.X + 30;
-            x3 = vehicle.Location.Y - (obstacle.Location.Y + obstacle.Height);
-            x4 = vehicle.Location.X - (obstacle.Location.X + obstacle.Width);
-            if (x4 < 0)
+            int x0 = 0, x1 = 0, x2 = 0, x3 = 0;
+            for (int i = 0; i < 6; i++)
             {
-                x4 = obstacle.Location.X - (vehicle.Location.X + vehicle.Width);
-                if (x4 < 0)
+                vehicle = vehicles[i];
+                for (int obstacleCounter = 0; obstacleCounter < obstacles.Count; obstacleCounter++)
                 {
-                    x4 = 0;
-                }
-            }
-            neuralNetwork.setInputData(x1, x2, x3, x4);
-        }
+                    obstacle = obstacles[obstacleCounter];
+                    x0 = area.Width - 30 - (vehicle.Location.X + vehicle.Width);
+                    x1 = vehicle.Location.X - 30;
+                    x2 = vehicle.Location.Y - (obstacle.Location.Y + obstacle.Height);
+                    x3 = vehicle.Location.X - (obstacle.Location.X + obstacle.Width);
+                    if (x3 < 0)
+                    {
+                        x3 = obstacle.Location.X - (vehicle.Location.X + vehicle.Width);
+                        if (x3 < 0)
+                        {
+                            x3 = 0;
+                        }
+                    }
+                    neuralNetwork = new NeuralNetwork();
+                    neuralNetwork.setInputData(x0, x1, x2, x3);
 
-        private void AddObstacle()
-        {
-            
-            for (int i = 0; i < obstacleCount; i++)
-            {
-                obstacle = new Obstacle();
-                obstacle.Location = new Point(rand.Next(100, 500), 100);
-                obstacles.Add(obstacle);
-                this.Controls.Add(obstacle);
-                obstacle.Parent = area;
-                obstacle.BringToFront();
+                    switch (neuralNetwork.right)
+                    {
+                        case true:
+                            vehicle.HorizontalControl = vehicle.Step;
+                            vehicle.Left += vehicle.HorizontalControl;
+                            VehicleBorderCollision();
+                            break;
+                        case false:
+                            vehicle.HorizontalControl = -vehicle.Step;
+                            vehicle.Left += vehicle.HorizontalControl;
+                            VehicleBorderCollision();
+                            break;
+                    }
+                }
+                
+
             }
         }
 
@@ -229,6 +283,14 @@ namespace CarRacingGameWithGeneticAlgorithm
             }
         }
 
+        private void MoveVehicles()
+        {
+            //for (int i = 0; i < 6; i++)
+            //{
+                //vehicle = vehicles[i];
+                
+            //}
+        }
 
         private void UpdateScore()
         {
@@ -246,26 +308,33 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         private void VehicleBorderCollision()
         {
-            if (vehicle.Left + vehicle.Width >= area.Width - 30)
+            for (int i = 0; i < 6; i++)
             {
-                InitializeGameOverTimer();
-            }
-            if (vehicle.Left <= area.Left + 30)
-            {
-                InitializeGameOverTimer();
+                vehicle = vehicles[i];
+                if (vehicle.Left + vehicle.Width >= area.Width - 30)
+                {
+                    InitializeGameOverTimer();
+                }
+                if (vehicle.Left <= area.Left + 30)
+                {
+                    InitializeGameOverTimer();
+                }
             }
             
         }
 
         private void VehicleObstacleCollision()
         {
-            Obstacle obstacle;
-            for (int obstacleCounter = 0; obstacleCounter < obstacles.Count; obstacleCounter++)
+            for (int i = 0; i < 6; i++)
             {
-                obstacle = obstacles[obstacleCounter];
-                if (obstacle.Bounds.IntersectsWith(vehicle.Bounds))
+                vehicle = vehicles[i];
+                for (int obstacleCounter = 0; obstacleCounter < obstacles.Count; obstacleCounter++)
                 {
-                    InitializeGameOverTimer();
+                    obstacle = obstacles[obstacleCounter];
+                    if (obstacle.Bounds.IntersectsWith(vehicle.Bounds))
+                    {
+                        InitializeGameOverTimer();
+                    }
                 }
             }
 
@@ -281,6 +350,7 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         private void GameOverTimer_Tick(object sender, EventArgs e)
         {
+            //neuralNetworkTimer.Stop();
             gameOverTimer.Stop();
             obstacleTimer.Stop();
             mainTimer.Stop();
@@ -368,6 +438,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             System.Diagnostics.Process.Start(Application.ExecutablePath);
             this.Close();
         }
+
     }
 
 

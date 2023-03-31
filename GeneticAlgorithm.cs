@@ -11,5 +11,34 @@ namespace CarRacingGameWithGeneticAlgorithm
 
     class GeneticAlgorithm
     {
+        public GeneticAlgorithm()
+        {
+
+        }
+
+        public void GeneratePopulation()
+        {
+
+        }
+
+        public void CalculateFitness()
+        {
+
+        }
+
+        public void Selection()
+        {
+
+        }
+
+        public void Crossover()
+        {
+
+        }
+
+        public void Mutation()
+        {
+
+        }
     }
 }
