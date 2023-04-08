@@ -64,6 +64,7 @@
     <Compile Include="Area.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Chromosome.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
