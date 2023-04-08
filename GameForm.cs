@@ -18,6 +18,8 @@ namespace CarRacingGameWithGeneticAlgorithm
         private Area area = new Area();
         private Vehicle vehicle;
         private List<Vehicle> vehicles = new List<Vehicle>();
+        public Chromosome chromosome;
+        public List<Chromosome> chromosomes = new List<Chromosome>();
         private Score score = new Score();
         private Obstacle obstacle;
         private List<Obstacle> obstacles = new List<Obstacle>();
@@ -36,7 +38,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         private Timer gameOverTimer = null;
         private int obstacleCount = 1;
         private Random rand = new Random();
-        
+        int vehicleCount = 0;
 
 
 
@@ -121,18 +123,19 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         private void AddGameElements()
         {
-            this.KeyDown += new KeyEventHandler(this.Game_KeyDown);
+            //this.KeyDown += new KeyEventHandler(this.Game_KeyDown);
             
             AddArea();
             AddVehicle();
             AddScore();
             AddObstacle();
             AddGeneticAlgorithm();
+            AddChromosomes();
             
             InitializeMainTimer();
             InitializeObstacleTimer();
-            //InitializeNeuralNetworkTimer();
-            //AddNeuralNetwork();
+            InitializeNeuralNetworkTimer();
+            
 
         }
         private void InitializeMainTimer()
@@ -171,11 +174,12 @@ namespace CarRacingGameWithGeneticAlgorithm
             neuralNetworkTimer.Tick += neuralNetworkTimer_Tick;
             neuralNetworkTimer.Interval = 500;
             neuralNetworkTimer.Start();
+
         }
 
         private void neuralNetworkTimer_Tick(object sender, EventArgs e)
         {
-            
+            AddNeuralNetwork();
         }
 
         private void AddArea()
@@ -223,6 +227,17 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         }
 
+        private void AddChromosomes()
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                chromosome = new Chromosome();
+
+                chromosomes.Add(chromosome);
+                //this.Controls.Add(chromosome);
+            }
+        }
+
         private void AddNeuralNetwork()
         {
             int x0 = 0, x1 = 0, x2 = 0, x3 = 0;
@@ -232,8 +247,8 @@ namespace CarRacingGameWithGeneticAlgorithm
                 for (int obstacleCounter = 0; obstacleCounter < obstacles.Count; obstacleCounter++)
                 {
                     obstacle = obstacles[obstacleCounter];
-                    x0 = area.Width - 30 - (vehicle.Location.X + vehicle.Width);
-                    x1 = vehicle.Location.X - 30;
+                    x0 = area.Width - 40 - (vehicle.Location.X + vehicle.Width);
+                    x1 = vehicle.Location.X - 40;
                     x2 = vehicle.Location.Y - (obstacle.Location.Y + obstacle.Height);
                     x3 = vehicle.Location.X - (obstacle.Location.X + obstacle.Width);
                     if (x3 < 0)
@@ -253,11 +268,13 @@ namespace CarRacingGameWithGeneticAlgorithm
                             vehicle.HorizontalControl = vehicle.Step;
                             vehicle.Left += vehicle.HorizontalControl;
                             VehicleBorderCollision();
+                            //VehicleObstacleCollision();
                             break;
                         case false:
                             vehicle.HorizontalControl = -vehicle.Step;
                             vehicle.Left += vehicle.HorizontalControl;
                             VehicleBorderCollision();
+                            //VehicleObstacleCollision();
                             break;
                     }
                 }
@@ -266,7 +283,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             }
         }
 
-        private void Game_KeyDown(object sender, KeyEventArgs e)
+        /*private void Game_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
@@ -281,7 +298,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                     VehicleBorderCollision();
                     break;
             }
-        }
+        }*/
 
         private void MoveVehicles()
         {
@@ -311,16 +328,22 @@ namespace CarRacingGameWithGeneticAlgorithm
             for (int i = 0; i < 6; i++)
             {
                 vehicle = vehicles[i];
-                if (vehicle.Left + vehicle.Width >= area.Width - 30)
+                if (vehicle.Left + vehicle.Width >= area.Width - 40)
                 {
-                    InitializeGameOverTimer();
+                    GameOverForOneVehicle(i);
+                    //MessageBox.Show(vehicleCount.ToString());
                 }
-                if (vehicle.Left <= area.Left + 30)
+                if (vehicle.Left <= area.Left + 40)
                 {
-                    InitializeGameOverTimer();
+                    GameOverForOneVehicle(i);
+                    //MessageBox.Show(vehicleCount.ToString());
+
+
                 }
+                //vehicleCount++;
             }
-            
+            //vehicleCount++;
+            //InitializeGameOverTimer();
         }
 
         private void VehicleObstacleCollision()
@@ -333,11 +356,25 @@ namespace CarRacingGameWithGeneticAlgorithm
                     obstacle = obstacles[obstacleCounter];
                     if (obstacle.Bounds.IntersectsWith(vehicle.Bounds))
                     {
-                        InitializeGameOverTimer();
+                        GameOverForOneVehicle(i);
+                        //MessageBox.Show(vehicleCount.ToString());
                     }
                 }
+                
             }
+            //vehicleCount++;
+            //InitializeGameOverTimer();
+        }
 
+
+        private void GameOverForOneVehicle(int i)
+        {
+            chromosome = chromosomes[i];
+            vehicles[i].Visible = false;
+            chromosomes[i].Fitness = score.ScoreNumber;
+            //MessageBox.Show(chromosomes[i].Fitness.ToString());
+
+            
         }
 
         private void InitializeGameOverTimer()
@@ -350,7 +387,7 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         private void GameOverTimer_Tick(object sender, EventArgs e)
         {
-            //neuralNetworkTimer.Stop();
+            neuralNetworkTimer.Stop();
             gameOverTimer.Stop();
             obstacleTimer.Stop();
             mainTimer.Stop();
@@ -435,8 +472,7 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         private void RestartGame()
         {
-            System.Diagnostics.Process.Start(Application.ExecutablePath);
-            this.Close();
+            
         }
 
     }
