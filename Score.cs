@@ -10,7 +10,7 @@ namespace CarRacingGameWithGeneticAlgorithm
 {
     public class Score : Label
     {
-        public int scoreNumber;
+        public int ScoreNumber { get; set; } = 0;
 
         public Score()
         {
@@ -27,8 +27,8 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         public void UpdatingScore(int score)
         {
-            scoreNumber += score;
-            this.Text = "Score: " + scoreNumber.ToString();
+            ScoreNumber += score;
+            this.Text = "Score: " + ScoreNumber.ToString();
         }
     }
 }
