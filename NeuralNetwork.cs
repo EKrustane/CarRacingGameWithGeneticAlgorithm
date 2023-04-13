@@ -18,6 +18,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         public double hidden1 { get; set; } = 0;
         public double output0 { get; set; } = 0;
         public double output1 { get; set; } = 0;
+        //
 
         Random rand = new Random();
         public bool right = false;
@@ -39,7 +40,10 @@ namespace CarRacingGameWithGeneticAlgorithm
             for (int i = 0; i < w.Length; i++)
             {
                 w[i] = rand.NextDouble() * (-0.5);
+                w[i] = Math.Round(w[i], 2);
+                
             }
+
         }
 
         public void setInputData(int x0, int x1, int x2, int x3)
