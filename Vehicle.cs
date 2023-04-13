@@ -25,7 +25,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             this.Image = (Image)Properties.Resources.ResourceManager.GetObject("car");
             this.Size = new Size(60, 100);
             this.BackColor = Color.Transparent;
-            this.Location = new Point(rand.Next(100, 400), 600);
+            //this.Location = new Point(rand.Next(100, 400), 600);
             this.Name = "Car";
         }
     }
