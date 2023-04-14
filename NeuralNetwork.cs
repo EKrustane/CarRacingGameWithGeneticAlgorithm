@@ -39,9 +39,11 @@ namespace CarRacingGameWithGeneticAlgorithm
         {
             for (int i = 0; i < w.Length; i++)
             {
-                w[i] = rand.NextDouble() * (-0.5);
-                w[i] = Math.Round(w[i], 2);
-                
+                w[i] = rand.NextDouble();
+                w[i] = Math.Round(w[i], 3);
+                //w[i] = Math.Round(Math.Floor(w[i]), 2);
+
+
             }
 
         }

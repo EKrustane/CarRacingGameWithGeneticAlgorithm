@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 
 namespace CarRacingGameWithGeneticAlgorithm
@@ -45,7 +46,12 @@ namespace CarRacingGameWithGeneticAlgorithm
         private int vehicleNumber;
         private int iterationNumber = 0;
         private List<int> vehicleNumbers = new List<int>();
-        private Label endText = new Label();
+        private Label endText1 = new Label();
+        private Label endText2 = new Label();
+        private Label endText3 = new Label();
+        private Label endText4 = new Label();
+        private Label endText5 = new Label();
+        private Label endText6 = new Label();
         //public ArrayList weights = new ArrayList();
 
 
@@ -70,6 +76,27 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         }
 
+        private void WriteInFile()
+        {
+            try
+            {
+                //Pass the filepath and filename to the StreamWriter Constructor
+                StreamWriter sw = new StreamWriter("C:\\Users\\Ermīne\\source\\repos\\CarRacingGameWithGeneticAlgorithm\\Rezults.txt");
+                //Write a line of text
+                sw.WriteLine(chromosomes[0].Fitness);
+                //Write a second line of text
+                //Close the file
+                sw.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Executing finally block.");
+            }
+        }
 
         private void InitializeStartPicture()
         {
@@ -422,32 +449,38 @@ namespace CarRacingGameWithGeneticAlgorithm
                 case 0:
                     scoreTimers[0].Stop();
                     chromosomes[0].Fitness = score.ScoreNumber;
+                    chromosome.AddFitnessToList(chromosomes[0].Fitness);
                     chromosome.weights.AddRange(neuralNetwork.w);
                     break;
                 case 1:
                     scoreTimers[1].Stop();
                     chromosomes[1].Fitness = score.ScoreNumber;
+                    chromosome.AddFitnessToList(chromosomes[1].Fitness);
                     chromosome.weights.AddRange(neuralNetwork.w);
                     break;
                 case 2:
                     scoreTimers[2].Stop();
                     chromosomes[2].Fitness = score.ScoreNumber;
+                    chromosomes[2].AddFitnessToList(chromosomes[2].Fitness);
                     chromosome.weights.AddRange(neuralNetwork.w);
                     break;
                 case 3:
                     scoreTimers[3].Stop();
                     chromosomes[3].Fitness = score.ScoreNumber;
+                    chromosome.AddFitnessToList(chromosomes[3].Fitness);
                     chromosome.weights.AddRange(neuralNetwork.w);
                     break;
                 case 4:
                     scoreTimers[4].Stop();
                     chromosomes[4].Fitness = score.ScoreNumber;
+                    chromosome.AddFitnessToList(chromosomes[4].Fitness);
                     chromosome.weights.AddRange(neuralNetwork.w);
                     break;
                 case 5:
                     scoreTimers[5].Stop();
-                    chromosome.Fitness = score.ScoreNumber;
-                    chromosomes[5].weights.AddRange(neuralNetwork.w);
+                    chromosomes[5].Fitness = score.ScoreNumber;
+                    chromosome.AddFitnessToList(chromosomes[5].Fitness);
+                    chromosome.weights.AddRange(neuralNetwork.w);
                     break;
             }
 
@@ -513,23 +546,66 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         private void EndText()
         {
-            this.Controls.Add(endText);
-            endText.Parent = endPicture;
-            endText.Visible = true;
-            endText.Size = new Size(420, 560);
-            endText.Location = new Point(90, 130);
-            endText.BackColor = Color.Transparent;
-            endText.Font = new Font("Impact", 8);
-            endText.Text = iterationNumber + ". iteration\r\n" + "Current population:\r\n" +
-                "Nr.         w0        w1        w2        w3        w4        " +
-                "w5        w6        w7        w8        w9        w10        w11   Fitness\r\n" +
-                "___________________________________________________________________\r\n" +
-                chromosome.PrintWeightsForChromosome(0) + "    " + chromosomes[0].Fitness + "\r\n" + 
-                chromosome.PrintWeightsForChromosome(1) + "    " + chromosomes[1].Fitness + "\r\n" +
-                chromosome.PrintWeightsForChromosome(2) + "    " + chromosomes[2].Fitness + "\r\n" + 
-                chromosome.PrintWeightsForChromosome(3) + "    " + chromosomes[3].Fitness + "\r\n" +
-                chromosome.PrintWeightsForChromosome(4) + "    " + chromosomes[4].Fitness + "\r\n" +
-                chromosome.PrintWeightsForChromosome(5) + "    " + chromosomes[5].Fitness + "\r\n";
+            this.Controls.Add(endText1);
+            this.Controls.Add(endText2);
+            this.Controls.Add(endText3);
+            this.Controls.Add(endText4);
+            this.Controls.Add(endText5);
+            this.Controls.Add(endText6);
+            endText1.Parent = endPicture;
+            endText2.Parent = endPicture;
+            endText3.Parent = endPicture;
+            endText4.Parent = endPicture;
+            endText5.Parent = endPicture;
+            endText6.Parent = endPicture;
+            endText1.Visible = true;
+            endText2.Visible = true;
+            endText3.Visible = true;
+            endText4.Visible = true;
+            endText5.Visible = true;
+            endText6.Visible = true;
+            endText1.Size = new Size(420, 35);
+            endText2.Size = new Size(420, 25);
+            endText3.Size = new Size(420, 17);
+            endText4.Size = new Size(420, 5);
+            endText5.Size = new Size(420, 70);
+            endText6.Size = new Size(420, 200);
+            endText1.Location = new Point(90, 130);
+            endText2.Location = new Point(90, 165);
+            endText3.Location = new Point(90, 205);
+            endText4.Location = new Point(90, 222);
+            endText5.Location = new Point(90, 227);
+            endText6.Location = new Point(90, 307);
+            endText1.BackColor = Color.Transparent;
+            endText2.BackColor = Color.Transparent;
+            endText3.BackColor = Color.Transparent;
+            endText4.BackColor = Color.Transparent;
+            endText5.BackColor = Color.Transparent;
+            endText6.BackColor = Color.Transparent;
+            endText1.Font = new Font("Impact", 20);
+            endText2.Font = new Font("Impact", 15);
+            endText3.Font = new Font("Impact", 8);
+            endText4.Font = new Font("Impact", 3);
+            endText5.Font = new Font("Impact", 6);
+            endText6.Font = new Font("Impact", 12);
+            endText1.Text = iterationNumber + ". iteration\r\n";
+            endText2.Text = "Current population:\r\n";
+            endText3.Text = "Nr.         w0        w1        w2        w3        w4        " +
+                "w5        w6        w7        w8        w9        w10        w11   Fitness\r\n";
+            endText4.Text = "_______________________________________________________________" +
+                "_________________________________________________________________________" +
+                "_______________________________________________________________________\r\n";
+            endText5.Text = 
+                chromosome.PrintWeightsForChromosome(0) + "     " + chromosomes[0].Fitness + "\r\n" + 
+                chromosome.PrintWeightsForChromosome(1) + "     " + chromosomes[1].Fitness + "\r\n" +
+                chromosome.PrintWeightsForChromosome(2) + "     " + chromosomes[2].Fitness + "\r\n" + 
+                chromosome.PrintWeightsForChromosome(3) + "     " + chromosomes[3].Fitness + "\r\n" +
+                chromosome.PrintWeightsForChromosome(4) + "     " + chromosomes[4].Fitness + "\r\n" +
+                chromosome.PrintWeightsForChromosome(5) + "     " + chromosomes[5].Fitness + "\r\n";
+            endText6.Text = "Max fitness: " + chromosome.MaxFitness() + "\r\n" + "Min fitness: " + 
+                chromosome.MinFitness() + "\r\n" + "Average fitness: " + chromosome.AverageFitness();
+
+            WriteInFile();
         }
     
         private void ButtonNew()
