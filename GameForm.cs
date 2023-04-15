@@ -53,6 +53,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         private Label endText5 = new Label();
         private Label endText6 = new Label();
         //public ArrayList weights = new ArrayList();
+        StreamWriter sw = new StreamWriter("C:\\Users\\Ermīne\\source\\repos\\CarRacingGameWithGeneticAlgorithm\\Rezults.txt");
 
 
         public CarRacingGame()
@@ -74,28 +75,6 @@ namespace CarRacingGameWithGeneticAlgorithm
             //add game elements, when Start button is clicked
             InitializeIfButtonIsClickedTimer();
 
-        }
-
-        private void WriteInFile()
-        {
-            try
-            {
-                //Pass the filepath and filename to the StreamWriter Constructor
-                StreamWriter sw = new StreamWriter("C:\\Users\\Ermīne\\source\\repos\\CarRacingGameWithGeneticAlgorithm\\Rezults.txt");
-                //Write a line of text
-                sw.WriteLine(chromosomes[0].Fitness);
-                //Write a second line of text
-                //Close the file
-                sw.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Exception: " + e.Message);
-            }
-            finally
-            {
-                Console.WriteLine("Executing finally block.");
-            }
         }
 
         private void InitializeStartPicture()
@@ -394,12 +373,12 @@ namespace CarRacingGameWithGeneticAlgorithm
                 vehicle = vehicles[i];
                 if (vehicle.Visible)
                 {
-                    if (vehicle.Left + vehicle.Width >= area.Width - 40)
+                    if (vehicle.Left + vehicle.Width >= (area.Width - 50))
                     {
                         GameOverForOneVehicle(i);
                         //MessageBox.Show(vehicleCount.ToString());
                     }
-                    if (vehicle.Left <= area.Left + 40)
+                    if (vehicle.Left <= (area.Left + 50))
                     {
                         GameOverForOneVehicle(i);
                         //MessageBox.Show(vehicleCount.ToString());
@@ -518,7 +497,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             mainTimer.Stop();
             for (int i = 1; i <= 6; i++)
             {
-                //vehicleNumbers.RemoveAt(i);
+                vehicleNumbers.RemoveAt(i);
             }
             GameOver();
         }
@@ -606,8 +585,33 @@ namespace CarRacingGameWithGeneticAlgorithm
                 chromosome.MinFitness() + "\r\n" + "Average fitness: " + chromosome.AverageFitness();
 
             WriteInFile();
+            
         }
-    
+
+        private void WriteInFile()
+        {
+            try
+            {
+                sw.WriteLine(iterationNumber.ToString() + ". iteration");
+                for (int i = 0; i < 6; i++)
+                {
+                    sw.WriteLine(chromosome.PrintWeightsForChromosome(i) + chromosomes[i].Fitness);
+                }
+                sw.WriteLine("Max fitness: " + chromosome.MaxFitness().ToString());
+                sw.WriteLine("Min fitness: " + chromosome.MinFitness().ToString());
+                sw.WriteLine("Average fitness: " + chromosome.AverageFitness().ToString());
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Executing finally block.");
+            }
+        }
+
         private void ButtonNew()
         {
             buttonNew.Parent = endPicture;
@@ -620,6 +624,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             buttonNew.Font = new Font("Impact", 20, FontStyle.Bold);
             buttonNew.BringToFront();
             buttonNew.Click += buttonNew_Click;
+            sw.Close();
         }
 
         private void ButtonNext()
@@ -649,6 +654,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             buttonClose.Font = new Font("Impact", 20, FontStyle.Bold);
             buttonClose.BringToFront();
             buttonClose.Click += buttonClose_Click;
+            sw.Close();
         }
 
         private void buttonNew_Click(object sender, EventArgs e)
