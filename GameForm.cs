@@ -674,7 +674,8 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         private void RestartGame()
         {
-            
+            System.Diagnostics.Process.Start(Application.ExecutablePath);
+            this.Close();
         }
 
     }
