@@ -13,8 +13,6 @@ namespace CarRacingGameWithGeneticAlgorithm
         public int Step { get; set; } = 20;
         public int HorizontalControl { get; set; } = 0;
 
-        private Random rand = new Random();
-
         public Vehicle()
         {
             InitializeVehicle();
@@ -25,8 +23,13 @@ namespace CarRacingGameWithGeneticAlgorithm
             this.Image = (Image)Properties.Resources.ResourceManager.GetObject("car");
             this.Size = new Size(60, 100);
             this.BackColor = Color.Transparent;
-            //this.Location = new Point(rand.Next(100, 400), 600);
             this.Name = "Car";
+        }
+
+        public void NextIteration()
+        {
+            Step = 0;
+            HorizontalControl = 0;
         }
     }
 }

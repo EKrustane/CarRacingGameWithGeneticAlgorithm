@@ -10,7 +10,7 @@ namespace CarRacingGameWithGeneticAlgorithm
     public class Chromosome
     { 
         public int Fitness { get; set; } = 0;
-        public List<int> fitneses = new List<int>();
+        public List<int> fitness = new List<int>();
         public ArrayList weights = new ArrayList();
 
         public Chromosome()
@@ -25,13 +25,13 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         public void AddFitnessToList(int fit)
         {
-            fitneses.Add(fit);
+            fitness.Add(fit);
         }
 
         public string PrintWeightsForChromosome(int i)
         {
             string weightsString = i + ".                      ";
-            for (int j = i * 12; j < (i * 12 + 12); j++)
+            for (int j = (i * 12); j < ((i * 12) + 12); j++)
             {
                 weightsString += weights[j].ToString() + "              ";
             }
@@ -41,21 +41,27 @@ namespace CarRacingGameWithGeneticAlgorithm
         public int MaxFitness()
         {
             int max = 0;
-            max = fitneses.Max();
+            max = fitness.Max();
             return max;
         }
 
         public int MinFitness()
         {
             int min = 0;
-            min = fitneses.Min();
+            min = fitness.Min();
             return min;
         }
         public double AverageFitness()
         {
             double avg = 0;
-            avg = fitneses.Average();
+            avg = fitness.Average();
             return avg;
+        }
+
+        public void NextIteration()
+        {
+            fitness.Clear();
+            weights.Clear();
         }
     }
 }

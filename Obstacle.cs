@@ -25,6 +25,15 @@ namespace CarRacingGameWithGeneticAlgorithm
             this.BackColor = Color.Transparent;
             this.Name = "Obstacle";
         }
+
+        public void NextIteration()
+        {
+            Step = 0;
+            VerticalControl = 0;
+            this.Image = (Image)Properties.Resources.ResourceManager.GetObject("transparent");
+            this.Size = new Size(60, 60);
+            this.BackColor = Color.Transparent;
+        }
     }
 
     

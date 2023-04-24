@@ -30,5 +30,11 @@ namespace CarRacingGameWithGeneticAlgorithm
             ScoreNumber += score;
             this.Text = "Score: " + ScoreNumber.ToString();
         }
+
+        public void NextIteration()
+        {
+            ScoreNumber = 0;
+            this.Visible = false;
+        }
     }
 }
