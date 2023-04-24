@@ -109,7 +109,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             output0 = 1 / (1 + Math.Exp(-s3)); ;
             output1 = 1 / (1 + Math.Exp(-s4)); ;
 
-            if(output0 >= output1)
+            if(output0 <= output1)
             {
                 right = true;
             }

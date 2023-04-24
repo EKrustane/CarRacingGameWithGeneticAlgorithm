@@ -26,7 +26,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         private Obstacle obstacle;
         private List<Obstacle> obstacles = new List<Obstacle>();
         private GeneticAlgorithm geneticAlgorithm;
-        private NeuralNetwork neuralNetwork;// = new NeuralNetwork();
+        private NeuralNetwork neuralNetwork;
         private List<NeuralNetwork> neuralNetworks = new List<NeuralNetwork>();
         private Button buttonStart = new Button();
         private Button buttonNew = new Button();
@@ -39,7 +39,6 @@ namespace CarRacingGameWithGeneticAlgorithm
         private List<Timer> scoreTimers = new List<Timer>();
         private Timer obstacleTimer = null;
         private Timer neuralNetworkTimer = null;
-        private Timer gameOverTimer = null;
         private int obstacleCount = 1;
         private Random rand1 = new Random();
         private Random rand2 = new Random();
@@ -54,9 +53,6 @@ namespace CarRacingGameWithGeneticAlgorithm
         private Label endText6 = new Label();
         //public ArrayList weights = new ArrayList();
         StreamWriter sw = new StreamWriter("C:\\Users\\Ermīne\\source\\repos\\CarRacingGameWithGeneticAlgorithm\\Rezults.txt");
-        private bool g = false;
-        public List<int> numbers = new List<int>();
-        public ArrayList nextGeneration = new ArrayList();
         public int check = 0;
 
         public CarRacingGame()
@@ -64,7 +60,6 @@ namespace CarRacingGameWithGeneticAlgorithm
             InitializeComponent();
             KeyPreview = true;
             InitializeGame();
-            //InitializeMainTimer();
         }
 
         private void InitializeGame()
@@ -135,17 +130,13 @@ namespace CarRacingGameWithGeneticAlgorithm
                 AddGameElements();
 
                 InitializeMainTimer();
-                
                 InitializeObstacleTimer();
-                //InitializeNeuralNetworkTimer();
             }
 
         }
         
         private void AddGameElements()
         {
-            //neuralNetwork.GetIterationNumber(iterationNumber);
-            //neuralNetwork.iterationNumber = iterationNumber;
             check = 0;
             AddArea();
             AddVehicle();
@@ -155,18 +146,12 @@ namespace CarRacingGameWithGeneticAlgorithm
             AddListOfVehicleNumbers();
             AddNeuralNetwork();
             InitializeScoreTimer();
-            /*InitializeMainTimer();
-            InitializeScoreTimer();
-            InitializeObstacleTimer();
-            InitializeNeuralNetworkTimer();*/
-
-            
         }
         private void InitializeMainTimer()
         {
             mainTimer = new Timer();
             mainTimer.Tick += MainTimer_Tick;
-            mainTimer.Interval = 40;
+            mainTimer.Interval = 60;
             mainTimer.Start();
         }
 
@@ -174,7 +159,6 @@ namespace CarRacingGameWithGeneticAlgorithm
         {
             MoveObstacle();
             VehicleObstacleCollision();
-            GTrue();
         }
 
         private void InitializeScoreTimer()
@@ -198,7 +182,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         {
             obstacleTimer = new Timer();
             obstacleTimer.Tick += obstacleTimer_Tick;
-            obstacleTimer.Interval = 1000;
+            obstacleTimer.Interval = 2000;
             obstacleTimer.Start();
         }
 
@@ -268,8 +252,6 @@ namespace CarRacingGameWithGeneticAlgorithm
         private void AddGeneticAlgorithm()
         {
             geneticAlgorithm = new GeneticAlgorithm();
-            //geneticAlgorithm.InitializeWeights();
-
         }
 
         private void AddChromosomes()
@@ -306,39 +288,30 @@ namespace CarRacingGameWithGeneticAlgorithm
             neuralNetwork.GetIterationNumber(iterationNumber);
             neuralNetwork.InitializeWeights();
             
-            
             for (int i = 0; i < 6; i++)
             {
                 for (int j = 0; j < 12; j++)
                 {
                     chromosome.weights.Add(neuralNetwork.w[i, j]);
                     geneticAlgorithm.generation.Add(neuralNetwork.w[i, j]);
-                    
                 }
                 
             }
             
             InitializeNeuralNetworkTimer();
-            //check = 0;
         }
 
         private void MoveVehicle()
         {
             double x0 = 0, x1 = 0, x2 = 0, x3 = 0;
-            
-            //neuralNetwork.InitializeWeights();
+
             for (int i = 0; i < 6; i++)
             {
                 vehicle = vehicles[i];
                 neuralNetwork = neuralNetworks[i];
-
-                //neuralNetwork = new NeuralNetwork();
-                //neuralNetwork.GetIterationNumber(iterationNumber);
-                //neuralNetwork.InitializeWeights(i);
                
                 for (int obstacleCounter = 0; obstacleCounter < obstacles.Count; obstacleCounter++)
                 {
-                    //neuralNetwork.InitializeWeights();
                     obstacle = obstacles[obstacleCounter];
                     x0 = area.Width - 40 - (vehicle.Location.X + vehicle.Width);
                     x1 = vehicle.Location.X - 40;
@@ -352,7 +325,6 @@ namespace CarRacingGameWithGeneticAlgorithm
                             x3 = 0;
                         }
                     }
-                    //neuralNetwork = new NeuralNetwork();
 
                     neuralNetwork.setInputData(x0, x1, x2, x3);
                     neuralNetwork.weights.AddRange(geneticAlgorithm.generation);
@@ -365,93 +337,16 @@ namespace CarRacingGameWithGeneticAlgorithm
                             vehicle.HorizontalControl = vehicle.Step;
                             vehicle.Left += vehicle.HorizontalControl;
                             VehicleBorderCollision();
-                            //VehicleObstacleCollision();
                             break;
                         case false:
                             vehicle.HorizontalControl = -vehicle.Step;
                             vehicle.Left += vehicle.HorizontalControl;
                             VehicleBorderCollision();
-                            //VehicleObstacleCollision();
                             break;
                     }
                 }
-
-
             }
-
-            
-            //geneticAlgorithm.nextGeneration.Clear();
-            //neuralNetwork.nextGeneration.Clear();
-            //neuralNetwork.nextGeneration.Clear();
-            //nextGeneration.Clear();
         }
-
-        /*private void AddNeuralNetwork()
-        {
-            int x0 = 0, x1 = 0, x2 = 0, x3 = 0;
-            //neuralNetwork.InitializeWeights();
-            for (int i = 0; i < 6; i++)
-            {
-                vehicle = vehicles[i];
-                //neuralNetwork = new NeuralNetwork();
-                neuralNetwork.InitializeWeights();
-                for (int obstacleCounter = 0; obstacleCounter < obstacles.Count; obstacleCounter++)
-                {
-                    //neuralNetwork.InitializeWeights();
-                    obstacle = obstacles[obstacleCounter];
-                    x0 = area.Width - 40 - (vehicle.Location.X + vehicle.Width);
-                    x1 = vehicle.Location.X - 40;
-                    x2 = vehicle.Location.Y - (obstacle.Location.Y + obstacle.Height);
-                    x3 = vehicle.Location.X - (obstacle.Location.X + obstacle.Width);
-                    if (x3 < 0)
-                    {
-                        x3 = obstacle.Location.X - (vehicle.Location.X + vehicle.Width);
-                        if (x3 < 0)
-                        {
-                            x3 = 0;
-                        }
-                    }
-                    //neuralNetwork = new NeuralNetwork();
-
-                    neuralNetwork.setInputData(x0, x1, x2, x3);
-
-                    switch (neuralNetwork.right)
-                    {
-                        case true:
-                            vehicle.HorizontalControl = vehicle.Step;
-                            vehicle.Left += vehicle.HorizontalControl;
-                            VehicleBorderCollision();
-                            //VehicleObstacleCollision();
-                            break;
-                        case false:
-                            vehicle.HorizontalControl = -vehicle.Step;
-                            vehicle.Left += vehicle.HorizontalControl;
-                            VehicleBorderCollision();
-                            //VehicleObstacleCollision();
-                            break;
-                    }
-                }
-
-
-            }
-        }*/
-
-        /*private void Game_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.Right:
-                    vehicle.HorizontalControl = vehicle.Step;
-                    vehicle.Left += vehicle.HorizontalControl;
-                    VehicleBorderCollision();
-                    break;
-                case Keys.Left:
-                    vehicle.HorizontalControl = -vehicle.Step;
-                    vehicle.Left += vehicle.HorizontalControl;
-                    VehicleBorderCollision();
-                    break;
-            }
-        }*/
         private void UpdateScore()
         {
             score.UpdatingScore(1);
@@ -476,20 +371,13 @@ namespace CarRacingGameWithGeneticAlgorithm
                     if (vehicle.Left + vehicle.Width >= (area.Width - 50))
                     {
                         GameOverForOneVehicle(i);
-                        //MessageBox.Show(vehicleCount.ToString());
                     }
                     if (vehicle.Left <= (area.Left + 50))
                     {
                         GameOverForOneVehicle(i);
-                        //MessageBox.Show(vehicleCount.ToString());
-
-
                     }
                 }
-                //vehicleCount++;
             }
-            //vehicleCount++;
-            //InitializeGameOverTimer();
         }
 
         private void VehicleObstacleCollision()
@@ -505,254 +393,75 @@ namespace CarRacingGameWithGeneticAlgorithm
                         if (obstacle.Bounds.IntersectsWith(vehicle.Bounds))
                         {
                             GameOverForOneVehicle(i);
-                            //MessageBox.Show(vehicleCount.ToString());
                         }
                     }
                 }
 
 
             }
-            //vehicleCount++;
-            //InitializeGameOverTimer();
         }
 
         private void GameOverForOneVehicle(int i)
         {
-            //neuralNetwork = neuralNetworks[i];
             vehicles[i].Visible = false;
-            
-            //scoreTimers[i].Stop();
-            //chromosomes[i].Fitness = score.ScoreNumber;
             vehicleNumbers.Add(i);
-            //MessageBox.Show(chromosomes[i].Fitness.ToString());
-            /*switch (i)
-            {
-                case 0:
-                    scoreTimers[0].Stop();
-                    chromosomes[0].Fitness = score.ScoreNumber;
-                    chromosome.AddFitnessToList(chromosomes[0].Fitness);
-                    for (int j = 0; j < 12; j++)
-                    {
-                        chromosome.weights.Add(neuralNetwork.w[0, j]);
-                        geneticAlgorithm.generation.Add(neuralNetwork.w[0, j]);
-                    }
-                    geneticAlgorithm.fitness.Add(chromosomes[0].Fitness);
-                    //geneticAlgorithm.AddToList();
-                    break;
-                case 1:
-                    scoreTimers[1].Stop();
-                    chromosomes[1].Fitness = score.ScoreNumber;
-                    chromosome.AddFitnessToList(chromosomes[1].Fitness);
-                    for (int j = 0; j < 12; j++)
-                    {
-                        chromosome.weights.Add(neuralNetwork.w[1, j]);
-                        geneticAlgorithm.generation.Add(neuralNetwork.w[1, j]);
-                    }
-                    geneticAlgorithm.fitness.Add(chromosomes[1].Fitness);
-                    //geneticAlgorithm.AddToList();
-                    break;
-                case 2:
-                    scoreTimers[2].Stop();
-                    chromosomes[2].Fitness = score.ScoreNumber;
-                    chromosome.AddFitnessToList(chromosomes[2].Fitness);
-                    for (int j = 0; j < 12; j++)
-                    {
-                        chromosome.weights.Add(neuralNetwork.w[2, j]);
-                        geneticAlgorithm.generation.Add(neuralNetwork.w[2, j]);
-                    }
-                    geneticAlgorithm.fitness.Add(chromosomes[2].Fitness);
-                    //geneticAlgorithm.AddToList();
-                    break;
-                case 3:
-                    scoreTimers[3].Stop();
-                    chromosomes[3].Fitness = score.ScoreNumber;
-                    chromosomes[3].AddFitnessToList(chromosomes[3].Fitness);
-                    for (int j = 0; j < 12; j++)
-                    {
-                        chromosome.weights.Add(neuralNetwork.w[3, j]);
-                        geneticAlgorithm.generation.Add(neuralNetwork.w[3, j]);
-                    }
-                    geneticAlgorithm.fitness.Add(chromosomes[3].Fitness);
-                    //geneticAlgorithm.AddToList();
-                    break;
-                case 4:
-                    scoreTimers[4].Stop();
-                    chromosomes[4].Fitness = score.ScoreNumber;
-                    chromosome.AddFitnessToList(chromosomes[4].Fitness);
-                    for (int j = 0; j < 12; j++)
-                    {
-                        chromosome.weights.Add(neuralNetwork.w[4, j]);
-                        geneticAlgorithm.generation.Add(neuralNetwork.w[4, j]);
-                    }
-                    geneticAlgorithm.fitness.Add(chromosomes[4].Fitness);
-                    //geneticAlgorithm.AddToList();
-                    break;
-                case 5:
-                    scoreTimers[5].Stop();
-                    chromosomes[5].Fitness = score.ScoreNumber;
-                    chromosome.AddFitnessToList(chromosomes[5].Fitness);
-                    for(int j = 0; j < 12; j++)
-                    {
-                        chromosome.weights.Add(neuralNetwork.w[5, j]);
-                        geneticAlgorithm.generation.Add(neuralNetwork.w[5, j]);
-                    }
-                    geneticAlgorithm.fitness.Add(chromosomes[5].Fitness);
-                    //geneticAlgorithm.AddToList();
-                    break;
-            }*/
             geneticAlgorithm.nextGeneration.Clear();
             neuralNetwork.nextGeneration.Clear();
-            //neuralNetwork.nextGeneration.Clear();
-            nextGeneration.Clear();
+
 
             if (i == 0)
             {
                 scoreTimers[0].Stop();
                 chromosomes[0].Fitness = score.ScoreNumber;
                 chromosome.AddFitnessToList(chromosomes[0].Fitness);
-                numbers.Add(i);
-                for (int j = 0; j < 12; j++)
-                {
-                    //chromosome.weights.Add(neuralNetwork.w[0, j]);
-                    //geneticAlgorithm.generation.Add(neuralNetwork.w[0, j]);
-                }
-                //geneticAlgorithm.fitness.Add(chromosomes[0].Fitness);
-                //geneticAlgorithm.AddToList();
             }
+
             if (i == 1)
             {
                 scoreTimers[1].Stop();
                 chromosomes[1].Fitness = score.ScoreNumber;
                 chromosome.AddFitnessToList(chromosomes[1].Fitness);
-                numbers.Add(i);
-                for (int j = 0; j < 12; j++)
-                {
-                    //chromosome.weights.Add(neuralNetwork.w[1, j]);
-                    //geneticAlgorithm.generation.Add(neuralNetwork.w[1, j]);
-                }
-                //geneticAlgorithm.fitness.Add(chromosomes[1].Fitness);
-                //geneticAlgorithm.AddToList();
             }
+
             if (i == 2)
             {
                 scoreTimers[2].Stop();
                 chromosomes[2].Fitness = score.ScoreNumber;
                 chromosome.AddFitnessToList(chromosomes[2].Fitness);
-                numbers.Add(i);
-                for (int j = 0; j < 12; j++)
-                {
-                    //chromosome.weights.Add(neuralNetwork.w[2, j]);
-                    //geneticAlgorithm.generation.Add(neuralNetwork.w[2, j]);
-                }
-                //geneticAlgorithm.fitness.Add(chromosomes[2].Fitness);
-                //geneticAlgorithm.AddToList();
             }
+
             if (i == 3)
             {
                 scoreTimers[3].Stop();
                 chromosomes[3].Fitness = score.ScoreNumber;
                 chromosomes[3].AddFitnessToList(chromosomes[3].Fitness);
-                numbers.Add(i);
-                for (int j = 0; j < 12; j++)
-                {
-                    //chromosome.weights.Add(neuralNetwork.w[3, j]);
-                    //geneticAlgorithm.generation.Add(neuralNetwork.w[3, j]);
-                }
-                //geneticAlgorithm.fitness.Add(chromosomes[3].Fitness);
-                //geneticAlgorithm.AddToList();
             }
+
             if (i == 4)
             {
                 scoreTimers[4].Stop();
                 chromosomes[4].Fitness = score.ScoreNumber;
                 chromosome.AddFitnessToList(chromosomes[4].Fitness);
-                numbers.Add(i);
-                for (int j = 0; j < 12; j++)
-                {
-                    //chromosome.weights.Add(neuralNetwork.w[4, j]);
-                    //geneticAlgorithm.generation.Add(neuralNetwork.w[4, j]);
-                }
-                //geneticAlgorithm.fitness.Add(chromosomes[4].Fitness);
-                //geneticAlgorithm.AddToList();
             }
+
             if (i == 5)
             {
                 scoreTimers[5].Stop();
-            chromosomes[5].Fitness = score.ScoreNumber;
-            chromosome.AddFitnessToList(chromosomes[5].Fitness);
-            numbers.Add(i);
-                for (int j = 0; j < 12; j++)
-            {
-                //chromosome.weights.Add(neuralNetwork.w[5, j]);
-                //geneticAlgorithm.generation.Add(neuralNetwork.w[5, j]);
+                chromosomes[5].Fitness = score.ScoreNumber;
+                chromosome.AddFitnessToList(chromosomes[5].Fitness);
             }
-            //geneticAlgorithm.fitness.Add(chromosomes[5].Fitness);
-            //geneticAlgorithm.AddToList();
-            }
-            
-
-
-            //geneticAlgorithm.fitness.Add(chromosomes[i].Fitness);
-            //for (int j = 0; j < 12; j++)
-            //{
-            //chromosome.weights.Add(neuralNetwork.w[i, j]);
-            //geneticAlgorithm.generation.Add(neuralNetwork.w[i, j]);
-            //}
-
-
-
 
             if (vehicleNumbers.Contains(0) && vehicleNumbers.Contains(1) &&
                 vehicleNumbers.Contains(2) && vehicleNumbers.Contains(3) &&
                 vehicleNumbers.Contains(4) && vehicleNumbers.Contains(5))
             {
-                //InitializeGameOverTimer();
                 GameOver();
-                //g = true;
             }
-        }
-
-        private void AddFitnessToGA()
-        {
-            
-        }
-
-        private void GTrue()
-        {
-            if(g== true)
-            {
-                //InitializeGameOverTimer();
-            }
-        }
-        /*private void MessageFitness()
-        {
-            MessageBox.Show(chromosomes[0].Fitness.ToString() + "," + chromosomes[1].Fitness.ToString() +
-                "," + chromosomes[2].Fitness.ToString() + "," + chromosomes[3].Fitness.ToString() +
-                "," + chromosomes[4].Fitness.ToString() + "," + chromosomes[5].Fitness.ToString());
-
-        }*/
-
-        private void InitializeGameOverTimer()
-        {
-            gameOverTimer = new Timer();
-            gameOverTimer.Tick += GameOverTimer_Tick;
-            gameOverTimer.Interval = 10;
-            gameOverTimer.Start();
-        }
-
-        private void GameOverTimer_Tick(object sender, EventArgs e)
-        {
-            /*neuralNetworkTimer.Stop();
-            gameOverTimer.Stop();
-            obstacleTimer.Stop();
-            mainTimer.Stop();*/
-            GameOver();
         }
 
         public void GameOver()
         {
             InitializeEndPicture();
-            
         }
 
         private void InitializeEndPicture()
@@ -840,9 +549,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             geneticAlgorithm.AllToList();
             geneticAlgorithm.Mutation();
             geneticAlgorithm.SelectionToNextGeneration();
-            //neuralNetwork.nextGeneration.AddRange(geneticAlgorithm.nextGeneration);
-            //neuralNetwork.GetNextIterationWeights(nextGeneration);
-            //check += 1;
+
             WriteInFile();
 
         }
@@ -895,7 +602,6 @@ namespace CarRacingGameWithGeneticAlgorithm
         {
             sw.Close();
             neuralNetworkTimer.Stop();
-            //gameOverTimer.Stop();
             obstacleTimer.Stop();
             mainTimer.Stop();
             RestartGame();
@@ -914,21 +620,13 @@ namespace CarRacingGameWithGeneticAlgorithm
                 geneticAlgorithm.NextIteration();
                 neuralNetwork.NextIteration();
                 AddGameElements();
-                //check -= 1;
-
             }
-
-            
-
-           
-            
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
         {
             sw.Close();
             neuralNetworkTimer.Stop();
-            //gameOverTimer.Stop();
             obstacleTimer.Stop();
             mainTimer.Stop();
             this.Close();
@@ -974,8 +672,6 @@ namespace CarRacingGameWithGeneticAlgorithm
             //neuralNetworks.Clear();
             obstacles.Clear();
             neuralNetworkTimer.Stop();
-            numbers.Clear();
-            
         }
 
         private void WriteInFile()
