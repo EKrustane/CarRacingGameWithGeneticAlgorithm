@@ -57,6 +57,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         private bool g = false;
         public List<int> numbers = new List<int>();
         public ArrayList nextGeneration = new ArrayList();
+        public int check = 0;
 
         public CarRacingGame()
         {
@@ -145,6 +146,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         {
             //neuralNetwork.GetIterationNumber(iterationNumber);
             //neuralNetwork.iterationNumber = iterationNumber;
+            check = 0;
             AddArea();
             AddVehicle();
             AddScore();
@@ -314,12 +316,12 @@ namespace CarRacingGameWithGeneticAlgorithm
                 }
                 
             }
-            //InitializeNeuralNetworkTimer();
+            //check = 0;
         }
 
         private void MoveVehicle()
         {
-            int x0 = 0, x1 = 0, x2 = 0, x3 = 0;
+            double x0 = 0, x1 = 0, x2 = 0, x3 = 0;
             
             //neuralNetwork.InitializeWeights();
             for (int i = 0; i < 6; i++)
@@ -836,7 +838,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             geneticAlgorithm.SelectionToNextGeneration();
             //neuralNetwork.nextGeneration.AddRange(geneticAlgorithm.nextGeneration);
             //neuralNetwork.GetNextIterationWeights(nextGeneration);
-            
+            //check += 1;
             WriteInFile();
 
         }
@@ -868,6 +870,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             buttonNext.Font = new Font("Impact", 20, FontStyle.Bold);
             buttonNext.BringToFront();
             buttonNext.Click += buttonNext_Click;
+            check += 1;
         }
 
         private void ButtonClose()
@@ -896,15 +899,25 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         private void buttonNext_Click(object sender, EventArgs e)
         {
+            if (check > 0)
+            {
+                iterationNumber++;
+                NextIteration();
+                obstacle.NextIteration();
+                vehicle.NextIteration();
+                score.NextIteration();
+                chromosome.NextIteration();
+                geneticAlgorithm.NextIteration();
+                neuralNetwork.NextIteration();
+                AddGameElements();
+                //check -= 1;
+
+            }
+
+            
+
            
-            iterationNumber++;
-            NextIteration();
-            obstacle.NextIteration();
-            vehicle.NextIteration();
-            score.NextIteration();
-            chromosome.NextIteration();
-            geneticAlgorithm.NextIteration();
-            AddGameElements();
+            
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
@@ -958,6 +971,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             obstacles.Clear();
             neuralNetworkTimer.Stop();
             numbers.Clear();
+            
         }
 
         private void WriteInFile()
