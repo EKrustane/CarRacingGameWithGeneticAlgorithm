@@ -305,7 +305,8 @@ namespace CarRacingGameWithGeneticAlgorithm
             neuralNetwork.nextGeneration.AddRange(geneticAlgorithm.nextGeneration);
             neuralNetwork.GetIterationNumber(iterationNumber);
             neuralNetwork.InitializeWeights();
-            InitializeNeuralNetworkTimer();
+            
+            
             for (int i = 0; i < 6; i++)
             {
                 for (int j = 0; j < 12; j++)
@@ -316,6 +317,8 @@ namespace CarRacingGameWithGeneticAlgorithm
                 }
                 
             }
+            
+            InitializeNeuralNetworkTimer();
             //check = 0;
         }
 
@@ -352,6 +355,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                     //neuralNetwork = new NeuralNetwork();
 
                     neuralNetwork.setInputData(x0, x1, x2, x3);
+                    neuralNetwork.weights.AddRange(geneticAlgorithm.generation);
                     neuralNetwork.InitializeHiddenLayer(i);
                     neuralNetwork.InitializeOutputData(i);
 
@@ -1039,6 +1043,11 @@ namespace CarRacingGameWithGeneticAlgorithm
                 sw.WriteLine(geneticAlgorithm.PrintNextGenerationWeights(3));
                 sw.WriteLine(geneticAlgorithm.PrintNextGenerationWeights(4));
                 sw.WriteLine(geneticAlgorithm.PrintNextGenerationWeights(5));
+                sw.WriteLine();
+                sw.WriteLine(neuralNetwork.PrintHiddenLayer(0));
+                sw.WriteLine(neuralNetwork.PrintHiddenLayer(1));
+                sw.WriteLine(neuralNetwork.PrintOutputLayer(0));
+                sw.WriteLine(neuralNetwork.PrintOutputLayer(1));
                 sw.WriteLine();
 
             }
