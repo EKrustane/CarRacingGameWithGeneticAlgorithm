@@ -25,7 +25,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         private Random rand = new Random();
         private double selection = 0;
         //private int iterationNumber;
-        public double[] w = new double[13];
+        public double[] w = new double[16];
 
         public GeneticAlgorithm()
         {
@@ -54,7 +54,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 {
                     numbers.Add(0);
                     fitnessForSelection.Add(fitness[0]);
-                    for(int j = 0; j < 13; j++)
+                    for(int j = 0; j < 16; j++)
                     {
                         weights1.Add(generation[j]);   
                     }
@@ -66,7 +66,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 {
                     numbers.Add(1);
                     fitnessForSelection.Add(fitness[1]);
-                    for (int k = 13; k < 26; k++)
+                    for (int k = 16; k < 32; k++)
                     {
                         weights1.Add(generation[k]);
                     }
@@ -77,7 +77,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 {
                     numbers.Add(2);
                     fitnessForSelection.Add(fitness[2]);
-                    for (int l = 26; l < 39; l++)
+                    for (int l = 32; l < 48; l++)
                     {
                         weights1.Add(generation[l]);
                     }
@@ -88,7 +88,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 {
                     numbers.Add(3);
                     fitnessForSelection.Add(fitness[3]);
-                    for (int m = 39; m < 52; m++)
+                    for (int m = 48; m < 64; m++)
                     {
                         weights1.Add(generation[m]);
                     }
@@ -99,7 +99,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 {
                     numbers.Add(4);
                     fitnessForSelection.Add(fitness[4]);
-                    for (int n = 52; n < 65; n++)
+                    for (int n = 64; n < 80; n++)
                     {
                         weights1.Add(generation[n]);
                     }
@@ -110,7 +110,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 {
                     numbers.Add(5);
                     fitnessForSelection.Add(fitness[5]);
-                    for (int o = 65; o < 78; o++)
+                    for (int o = 80; o < 96; o++)
                     {
                         weights1.Add(generation[o]);
                     }
@@ -129,7 +129,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             {
                 if (fitnessForSelection[j] >= fitnessForSelection[j + 1])
                 {
-                    for (int l = j * 13; l < j * 13 + 13; l++)
+                    for (int l = j * 16; l < j * 16 + 16; l++)
                     {
                         weights1.Add(weightsForSelection[l]);
                     }
@@ -140,7 +140,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 }
                 else
                 {
-                    for (int l = (j + 1) * 13; l < (j + 1) * 13 + 13; l++)
+                    for (int l = (j + 1) * 16; l < (j + 1) * 16 + 16; l++)
                     {
                         weights1.Add(weightsForSelection[l]);
                     }
@@ -191,26 +191,26 @@ namespace CarRacingGameWithGeneticAlgorithm
             {
                 
                 gen = genW[i];
-                genW[i] = genW[i + 13];
-                genW[i + 13] = gen;
+                genW[i] = genW[i + 16];
+                genW[i + 16] = gen;
             }
 
             j = CrossoverLocation();
             k = CrossoverLocation() + 6;
-            for (int l = j + 26; l <= k + 26; l++)
+            for (int l = j + 32; l <= k + 32; l++)
             {
                 gen = genW[l];
-                genW[l] = genW[l + 13];
-                genW[l + 13] = gen;
+                genW[l] = genW[l + 16];
+                genW[l + 16] = gen;
             }
             
             j = CrossoverLocation();
             k = CrossoverLocation() + 6;
-            for (int m = j + 52; m <= k + 52; m++)
+            for (int m = j + 64; m <= k + 64; m++)
             {
                 gen = genW[m];
-                genW[m] = genW[m + 13];
-                genW[m + 13] = gen;
+                genW[m] = genW[m + 16];
+                genW[m + 16] = gen;
             }
             
         }
@@ -232,7 +232,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 if(k <= 0.3)
                 {
                     int loc = CrossoverLocation();
-                    generation[i * 13 + loc] = RandomNumber();
+                    generation[i * 16 + loc] = RandomNumber();
                 }
             }
         }
@@ -244,7 +244,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 selection = RandomNumber();
                 if (selection >= 0 && selection <= 0.083)
                 {
-                    for (int j = 0; j < 13; j++)
+                    for (int j = 0; j < 16; j++)
                     {
                         weights1.Add(generation[j]);
                     }
@@ -253,7 +253,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 }
                 else if (selection > 0.083 && selection <= 0.167)
                 {
-                    for (int j = 13; j < 26; j++)
+                    for (int j = 16; j < 32; j++)
                     {
                         weights1.Add(generation[j]);
                     }
@@ -262,7 +262,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 }
                 else if (selection > 0.167 && selection <= 0.25)
                 {
-                    for (int j = 26; j < 39; j++)
+                    for (int j = 32; j < 48; j++)
                     {
                         weights1.Add(generation[j]);
                     }
@@ -271,7 +271,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 }
                 else if (selection > 0.25 && selection <= 0.333)
                 {
-                    for (int j = 39; j < 52; j++)
+                    for (int j = 48; j < 64; j++)
                     {
                         weights1.Add(generation[j]);
                     }
@@ -280,7 +280,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 }
                 else if (selection > 0.333 && selection <= 0.417)
                 {
-                    for (int j = 52; j < 65; j++)
+                    for (int j = 64; j < 80; j++)
                     {
                         weights1.Add(generation[j]);
                     }
@@ -289,7 +289,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 }
                 else if (selection > 0.417 && selection <= 0.5)
                 {
-                    for (int j = 65; j < 78; j++)
+                    for (int j = 80; j < 96; j++)
                     {
                         weights1.Add(generation[j]);
                     }
@@ -298,7 +298,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 }
                 if (selection >= 0.5 && selection <= 0.583)
                 {
-                    for (int j = 78; j < 91; j++)
+                    for (int j =96; j < 112; j++)
                     {
                         weights1.Add(generation[j]);
                     }
@@ -307,7 +307,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 }
                 else if (selection > 0.583 && selection <= 0.667)
                 {
-                    for (int j = 91; j < 104; j++)
+                    for (int j = 112; j < 128; j++)
                     {
                         weights1.Add(generation[j]);
                     }
@@ -316,7 +316,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 }
                 else if (selection > 0.667 && selection <= 0.75)
                 {
-                    for (int j = 104; j < 117; j++)
+                    for (int j = 128; j < 144; j++)
                     {
                         weights1.Add(generation[j]);
                     }
@@ -325,7 +325,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 }
                 else if (selection > 0.75 && selection <= 0.833)
                 {
-                    for (int j = 117; j < 130; j++)
+                    for (int j = 144; j < 160; j++)
                     {
                         weights1.Add(generation[j]);
                     }
@@ -334,7 +334,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 }
                 else if (selection > 0.833 && selection <= 0.917)
                 {
-                    for (int j = 130; j < 143; j++)
+                    for (int j = 160; j < 176; j++)
                     {
                         weights1.Add(generation[j]);
                     }
@@ -343,7 +343,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 }
                 else if (selection > 0.917 && selection <= 1)
                 {
-                    for (int j = 143; j < 156; j++)
+                    for (int j = 176; j < 192; j++)
                     {
                         weights1.Add(generation[j]);
                     }
@@ -356,7 +356,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         public string PrintWeightsAfterCrossover(int i)
         {
             string weightsString = "";
-            for (int j = i * 13; j < (i * 13 + 13); j++)
+            for (int j = i * 16; j < (i * 16 + 16); j++)
             {
                 weightsString += genW[j].ToString() + "  ";
             }
@@ -366,7 +366,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         public string PrintWeightsAfterMutation(int i)
         {
             string weightsString = "";
-            for (int j = i * 13; j < (i * 13 + 13); j++)
+            for (int j = i * 16; j < (i * 16 + 16); j++)
             {
                 weightsString += generation[j].ToString() + "  ";
             }
@@ -376,7 +376,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         public string PrintNextGenerationWeights(int i)
         {
             string weightsString = "";
-            for (int j = i * 13; j < (i * 13 + 13); j++)
+            for (int j = i * 16; j < (i * 16 + 16); j++)
             {
                 weightsString += nextGeneration[j].ToString() + "  ";
             }
@@ -386,7 +386,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         public string PrintWeightsForSelection(int i)
         {
             string weightsString = "";
-            for (int j = i * 13; j < (i * 13 + 13); j++)
+            for (int j = i * 16; j < (i * 16 + 16); j++)
             {
                 weightsString += weightsForSelection[j].ToString() + "  ";
             }

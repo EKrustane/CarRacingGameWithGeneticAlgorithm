@@ -111,9 +111,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\road.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\prototype.png" />
   </ItemGroup>
   <ItemGroup>
@@ -124,9 +121,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\obstacle.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\end_picture.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -142,6 +136,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\transparent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\end_picture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\road.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\start_picture1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

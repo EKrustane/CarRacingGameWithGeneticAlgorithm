@@ -21,7 +21,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         {
             this.BackColor = Color.Transparent;
             this.Size = new Size(150, 100);
-            this.Location = new Point(230, 15);
+            this.Location = new Point(370, 15);
             this.Font = new Font("Century Gothic", 18, FontStyle.Bold);
         }
 

@@ -103,9 +103,9 @@ namespace CarRacingGameWithGeneticAlgorithm.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap start_picture {
+        internal static System.Drawing.Bitmap start_picture1 {
             get {
-                object obj = ResourceManager.GetObject("start_picture", resourceCulture);
+                object obj = ResourceManager.GetObject("start_picture1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

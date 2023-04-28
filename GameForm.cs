@@ -53,6 +53,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         private Label endText6 = new Label();
         //public ArrayList weights = new ArrayList();
         StreamWriter sw = new StreamWriter("C:\\Users\\Ermīne\\source\\repos\\CarRacingGameWithGeneticAlgorithm\\Rezults.txt");
+        StreamWriter eksp = new StreamWriter("C:\\Users\\Ermīne\\Desktop\\Svarīgi\\Dokumenti\\RTU nodarbības\\3.kurss_2.semestris\\Bakalaura_darbs\\eksperimenti.csv");
         public int check = 0;
 
         public CarRacingGame()
@@ -66,7 +67,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         {
             iterationNumber = 0;
             //adjust game form size
-            this.Size = new Size(615, 825);
+            this.Size = new Size(900, 825);
 
             //add start picture
             InitializeStartPicture();
@@ -81,17 +82,17 @@ namespace CarRacingGameWithGeneticAlgorithm
             this.Controls.Add(startPicture);
             startPicture.Visible = true;
             startPicture.Location = new Point(0, 0);
-            startPicture.Size = new Size(600, 800);
+            startPicture.Size = new Size(900, 800);
             startPicture.SizeMode = PictureBoxSizeMode.StretchImage;
             startPicture.BringToFront();
-            startPicture.Image = (Image)Properties.Resources.ResourceManager.GetObject("start_picture");
+            startPicture.Image = (Image)Properties.Resources.ResourceManager.GetObject("start_picture1");
             ButtonStart();
         }
         private void ButtonStart()
         {
             buttonStart.Parent = startPicture;
             buttonStart.Size = new Size(160, 50);
-            buttonStart.Location = new Point(220, 640);
+            buttonStart.Location = new Point(375, 640);
             buttonStart.BackColor = Color.Black;
             buttonStart.ForeColor = Color.White;
             buttonStart.Text = "START";
@@ -134,7 +135,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             }
 
         }
-        
+
         private void AddGameElements()
         {
             check = 0;
@@ -218,7 +219,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 vehicle = new Vehicle();
                 vehicles.Add(vehicle);
                 this.Controls.Add(vehicles[i]);
-                vehicles[i].Location = new Point(rand1.Next(100, 400), 600);
+                vehicles[i].Location = new Point(rand1.Next(100, 800), 600);
                 vehicles[i].Parent = area;
                 vehicles[i].BringToFront();
                 vehicle.Visible = true;
@@ -231,7 +232,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             for (int i = 0; i < obstacleCount; i++)
             {
                 obstacle = new Obstacle();
-                obstacle.Location = new Point(rand2.Next(100, 500), 100);
+                obstacle.Location = new Point(rand2.Next(100, 800), 100);
                 obstacles.Add(obstacle);
                 this.Controls.Add(obstacle);
                 obstacle.Parent = area;
@@ -281,23 +282,23 @@ namespace CarRacingGameWithGeneticAlgorithm
             {
                 neuralNetwork = new NeuralNetwork();
                 neuralNetworks.Add(neuralNetwork);
-                
-                
+
+
             }
             neuralNetwork.nextGeneration.AddRange(geneticAlgorithm.nextGeneration);
             neuralNetwork.GetIterationNumber(iterationNumber);
             neuralNetwork.InitializeWeights();
-            
+
             for (int i = 0; i < 6; i++)
             {
-                for (int j = 0; j < 13; j++)
+                for (int j = 0; j < 16; j++)
                 {
                     chromosome.weights.Add(neuralNetwork.w[i, j]);
                     geneticAlgorithm.generation.Add(neuralNetwork.w[i, j]);
                 }
-                
+
             }
-            
+
             InitializeNeuralNetworkTimer();
         }
 
@@ -309,7 +310,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             {
                 vehicle = vehicles[i];
                 neuralNetwork = neuralNetworks[i];
-               
+
                 for (int obstacleCounter = 0; obstacleCounter < obstacles.Count; obstacleCounter++)
                 {
                     obstacle = obstacles[obstacleCounter];
@@ -470,7 +471,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             endPicture.Image = (Image)Properties.Resources.ResourceManager.GetObject("end_picture");
             endPicture.Visible = true;
             endPicture.BringToFront();
-            endPicture.Location = new Point(0, 0);
+            endPicture.Location = new Point(-8, 0);
             endPicture.Size = area.Size;
             endPicture.SizeMode = PictureBoxSizeMode.StretchImage;
             EndText();
@@ -499,45 +500,46 @@ namespace CarRacingGameWithGeneticAlgorithm
             endText4.Visible = true;
             endText5.Visible = true;
             endText6.Visible = true;
-            endText1.Size = new Size(420, 35);
-            endText2.Size = new Size(420, 25);
-            endText3.Size = new Size(420, 17);
-            endText4.Size = new Size(420, 5);
-            endText5.Size = new Size(420, 70);
-            endText6.Size = new Size(420, 200);
+            endText1.Size = new Size(720, 35);
+            endText2.Size = new Size(720, 35);
+            endText3.Size = new Size(720, 17);
+            endText4.Size = new Size(720, 10);
+            endText5.Size = new Size(720, 100);
+            endText6.Size = new Size(720, 100);
             endText1.Location = new Point(90, 130);
             endText2.Location = new Point(90, 165);
             endText3.Location = new Point(90, 205);
             endText4.Location = new Point(90, 222);
-            endText5.Location = new Point(90, 227);
-            endText6.Location = new Point(90, 307);
+            endText5.Location = new Point(90, 232);
+            endText6.Location = new Point(90, 332);
             endText1.BackColor = Color.Transparent;
             endText2.BackColor = Color.Transparent;
             endText3.BackColor = Color.Transparent;
             endText4.BackColor = Color.Transparent;
             endText5.BackColor = Color.Transparent;
             endText6.BackColor = Color.Transparent;
-            endText1.Font = new Font("Impact", 20);
-            endText2.Font = new Font("Impact", 15);
-            endText3.Font = new Font("Impact", 7);
-            endText4.Font = new Font("Impact", 3);
-            endText5.Font = new Font("Impact", 6);
-            endText6.Font = new Font("Impact", 12);
+            endText1.Font = new Font("Impact", 22);
+            endText2.Font = new Font("Impact", 20);
+            endText3.Font = new Font("Impact", 10);
+            endText4.Font = new Font("Impact", 5);
+            endText5.Font = new Font("Impact", 8);
+            endText6.Font = new Font("Impact", 15);
             endText1.Text = iterationNumber + ". iteration\r\n";
             endText2.Text = "Current population:\r\n";
-            endText3.Text = "Nr.         w0        w1        w2        w3        w4        " +
-                "w5        w6        w7        w8        w9        w10        w11        w12    Fitness\r\n";
+            endText3.Text = "Nr.           w0          w1          w2          w3          w4          " +
+                "w5          w6          w7          w8          w9          w10          w11          w12          w13" +
+                "          w14          w15      Fitness\r\n";
             endText4.Text = "_______________________________________________________________" +
                 "_________________________________________________________________________" +
                 "_______________________________________________________________________\r\n";
             endText5.Text =
-                chromosome.PrintWeightsForChromosome(0) + "     " + chromosomes[0].Fitness + "\r\n" +
-                chromosome.PrintWeightsForChromosome(1) + "     " + chromosomes[1].Fitness + "\r\n" +
-                chromosome.PrintWeightsForChromosome(2) + "     " + chromosomes[2].Fitness + "\r\n" +
-                chromosome.PrintWeightsForChromosome(3) + "     " + chromosomes[3].Fitness + "\r\n" +
-                chromosome.PrintWeightsForChromosome(4) + "     " + chromosomes[4].Fitness + "\r\n" +
-                chromosome.PrintWeightsForChromosome(5) + "     " + chromosomes[5].Fitness + "\r\n";
-            endText6.Text = "Max fitness: " + chromosome.MaxFitness() + "\r\n" + "Min fitness: " + 
+                chromosome.PrintWeightsForChromosome(0) + "       " + chromosomes[0].Fitness + "\r\n" +
+                chromosome.PrintWeightsForChromosome(1) + "       " + chromosomes[1].Fitness + "\r\n" +
+                chromosome.PrintWeightsForChromosome(2) + "       " + chromosomes[2].Fitness + "\r\n" +
+                chromosome.PrintWeightsForChromosome(3) + "       " + chromosomes[3].Fitness + "\r\n" +
+                chromosome.PrintWeightsForChromosome(4) + "       " + chromosomes[4].Fitness + "\r\n" +
+                chromosome.PrintWeightsForChromosome(5) + "       " + chromosomes[5].Fitness + "\r\n";
+            endText6.Text = "Max fitness: " + chromosome.MaxFitness() + "\r\n" + "Min fitness: " +
                 chromosome.MinFitness() + "\r\n" + "Average fitness: " + chromosome.AverageFitness();
 
             for (int k = 0; k < 6; k++)
@@ -551,14 +553,14 @@ namespace CarRacingGameWithGeneticAlgorithm
             geneticAlgorithm.SelectionToNextGeneration();
 
             WriteInFile();
-
+            WriteInCSVFile();
         }
 
         private void ButtonNew()
         {
             buttonNew.Parent = endPicture;
             buttonNew.Size = new Size(100, 40);
-            buttonNew.Location = new Point(250, 730);
+            buttonNew.Location = new Point(400, 730);
             buttonNew.Visible = true;
             buttonNew.BackColor = Color.Black;
             buttonNew.ForeColor = Color.White;
@@ -573,7 +575,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         {
             buttonNext.Parent = endPicture;
             buttonNext.Size = new Size(100, 40);
-            buttonNext.Location = new Point(120, 730);
+            buttonNext.Location = new Point(280, 730);
             buttonNext.Visible = true;
             buttonNext.BackColor = Color.Black;
             buttonNext.ForeColor = Color.White;
@@ -588,7 +590,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         {
             buttonClose.Parent = endPicture;
             buttonClose.Size = new Size(100, 40);
-            buttonClose.Location = new Point(380, 730);
+            buttonClose.Location = new Point(530, 730);
             buttonClose.Visible = true;
             buttonClose.BackColor = Color.Black;
             buttonClose.ForeColor = Color.White;
@@ -601,6 +603,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         private void buttonNew_Click(object sender, EventArgs e)
         {
             sw.Close();
+            eksp.Close();
             neuralNetworkTimer.Stop();
             obstacleTimer.Stop();
             mainTimer.Stop();
@@ -626,6 +629,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         private void buttonClose_Click(object sender, EventArgs e)
         {
             sw.Close();
+            eksp.Close();
             neuralNetworkTimer.Stop();
             obstacleTimer.Stop();
             mainTimer.Stop();
@@ -651,7 +655,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             endText5.Visible = false;
             endText6.Visible = false;
             area.Visible = false;
-            for(int i = 0; i < vehicles.Count; i++)
+            for (int i = 0; i < vehicles.Count; i++)
             {
                 this.Controls.Remove(vehicles[i]);
                 vehicles[i].Visible = false;
@@ -685,7 +689,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 for (int i = 0; i < 6; i++)
                 {
                     weightsString = "";
-                    for (int j = i * 13; j < (i * 13 + 13); j++)
+                    for (int j = i * 16; j < (i * 16 + 16); j++)
                     {
                         weightsString += geneticAlgorithm.generation[j].ToString() + "  ";
                     }
@@ -742,8 +746,8 @@ namespace CarRacingGameWithGeneticAlgorithm
                 sw.WriteLine();
                 sw.WriteLine(neuralNetwork.PrintHiddenLayer(1));
                 sw.WriteLine(neuralNetwork.PrintHiddenLayer(2));
-                sw.WriteLine(neuralNetwork.PrintOutputLayer());
-
+                sw.WriteLine(neuralNetwork.PrintOutputLayer(0));
+                sw.WriteLine(neuralNetwork.PrintOutputLayer(1));
                 sw.WriteLine();
 
             }
@@ -756,8 +760,24 @@ namespace CarRacingGameWithGeneticAlgorithm
                 Console.WriteLine("Executing finally block.");
             }
         }
-    }
+        private void WriteInCSVFile()
+        {
+            try
+            {
+                eksp.WriteLine(chromosome.MaxFitness() + ",");
 
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Executing finally block.");
+            }
+
+        }
+    }
 
 
 }

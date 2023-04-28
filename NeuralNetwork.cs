@@ -15,7 +15,7 @@ namespace CarRacingGameWithGeneticAlgorithm
 {
     class NeuralNetwork
     {
-        public double[,] w = new double[6, 13];
+        public double[,] w = new double[6, 16];
         public double input0 { get; set; } = 1;
         public double input1 { get; set; } = 0;
         public double input2 { get; set; } = 0;
@@ -24,7 +24,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         public double hidden0 { get; set; } = 1;
         public double hidden1 { get; set; } = 0;
         public double hidden2 { get; set; } = 0;
-        public double output { get; set; } = 0;
+        public double output0 { get; set; } = 0;
         public double output1 { get; set; } = 0;
 
         public int iterationNumber;
@@ -63,7 +63,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             {
                 for (int i = 0; i < 6; i++)
                 {
-                    for (int j = 0; j < 13; j++)
+                    for (int j = 0; j < 16; j++)
                     {
                         w[i, j] = rand.NextDouble();
                         w[i, j] = Math.Round(w[i, j], 3);
@@ -75,10 +75,10 @@ namespace CarRacingGameWithGeneticAlgorithm
             {
                 for (int i = 0; i < 6; i++)
                 {
-                    for (int j = 0; j < 13; j++)
+                    for (int j = 0; j < 16; j++)
                     {
                         double [] n = (double[])nextGeneration.ToArray(typeof(double));
-                        w[i, j] = n[i * 13 + j];
+                        w[i, j] = n[i * 16 + j];
                         //weights.Add(w[i, j]);
                     }
                 }
@@ -97,20 +97,22 @@ namespace CarRacingGameWithGeneticAlgorithm
         {
             double s1, s2;
             double[] n = (double[])weights.ToArray(typeof(double));
-            s1 = input0 * n[j * 13 + 0] + input1 * n[j * 13 + 2] + input2 * n[j * 13 + 4] + input3 * n[j * 13 + 6] + input4 * n[j * 13 + 8];
-            s2 = input0 * n[j * 13 + 1] + input1 * n[j * 13 + 3] + input2 * n[j * 13 + 5] + input3 * n[j * 13 + 7] + input4 * n[j * 13 + 9];
+            s1 = input0 * n[j * 16 + 0] + input1 * n[j * 16 + 2] + input2 * n[j * 16 + 4] + input3 * n[j * 16 + 6] + input4 * n[j * 16 + 8];
+            s2 = input0 * n[j * 16 + 1] + input1 * n[j * 16 + 3] + input2 * n[j * 16 + 5] + input3 * n[j * 16 + 7] + input4 * n[j * 16 + 9];
             hidden1 = 1 / (1 + Math.Exp(-s1/1000));
             hidden2 = 1 / (1 + Math.Exp(-s2/1000));
         }
 
         public void InitializeOutputData(int j)
         {
-            double s3;
+            double s3, s4;
             double[] n = (double[])weights.ToArray(typeof(double));
-            s3 = hidden0 * n[j * 13 + 10] + hidden1 * n[j * 13 + 11] + hidden2 * n[j * 13 + 12];
-            output = 1 / (1 + Math.Exp(-s3)); ;
+            s3 = hidden0 * n[j * 16 + 10] + hidden1 * n[j * 16 + 12] + hidden2 * n[j * 16 + 14];
+            s4 = hidden0 * n[j * 16 + 11] + hidden1 * n[j * 16 + 13] + hidden2 * n[j * 16 + 15];
+            output0 = 1 / (1 + Math.Exp(-s3));
+            output1 = 1 / (1 + Math.Exp(-s4));
 
-            if(output < 0.75)
+            if (output0 <= output1)
             {
                 right = true;
             }
@@ -134,10 +136,18 @@ namespace CarRacingGameWithGeneticAlgorithm
             }
             return hidden;
         }
-        public string PrintOutputLayer()
+        public string PrintOutputLayer(int i)
         {
-            string outputS = "Output = " + output.ToString();
-            return outputS;
+            string output = "";
+            if (i == 0)
+            {
+                output = "Output0 = " + output0.ToString();
+            }
+            else
+            {
+                output = "Output1 = " + output1.ToString();
+            }
+            return output;
         }
 
         public void NextIteration()

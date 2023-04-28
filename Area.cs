@@ -20,7 +20,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         {
             string v = "road";
             this.Image = (Image)Properties.Resources.ResourceManager.GetObject(v);
-            this.Size = new Size(600, 800);
+            this.Size = new Size(900, 800);
             this.Location = new Point(-8, 0);
             this.Name = "Road";
         }
