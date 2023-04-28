@@ -290,7 +290,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             
             for (int i = 0; i < 6; i++)
             {
-                for (int j = 0; j < 12; j++)
+                for (int j = 0; j < 13; j++)
                 {
                     chromosome.weights.Add(neuralNetwork.w[i, j]);
                     geneticAlgorithm.generation.Add(neuralNetwork.w[i, j]);
@@ -303,7 +303,7 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         private void MoveVehicle()
         {
-            double x0 = 0, x1 = 0, x2 = 0, x3 = 0;
+            double x1 = 0, x2 = 0, x3 = 0, x4 = 0;
 
             for (int i = 0; i < 6; i++)
             {
@@ -313,20 +313,20 @@ namespace CarRacingGameWithGeneticAlgorithm
                 for (int obstacleCounter = 0; obstacleCounter < obstacles.Count; obstacleCounter++)
                 {
                     obstacle = obstacles[obstacleCounter];
-                    x0 = area.Width - 40 - (vehicle.Location.X + vehicle.Width);
-                    x1 = vehicle.Location.X - 40;
-                    x2 = vehicle.Location.Y - (obstacle.Location.Y + obstacle.Height);
-                    x3 = vehicle.Location.X - (obstacle.Location.X + obstacle.Width);
-                    if (x3 < 0)
+                    x1 = area.Width - 50 - (vehicle.Location.X + vehicle.Width);
+                    x2 = vehicle.Location.X - 50;
+                    x3 = vehicle.Location.Y - (obstacle.Location.Y + obstacle.Height);
+                    x4 = vehicle.Location.X - (obstacle.Location.X + obstacle.Width);
+                    if (x4 < 0)
                     {
-                        x3 = obstacle.Location.X - (vehicle.Location.X + vehicle.Width);
-                        if (x3 < 0)
+                        x4 = obstacle.Location.X - (vehicle.Location.X + vehicle.Width);
+                        if (x4 < 0)
                         {
-                            x3 = 0;
+                            x4 = 0;
                         }
                     }
 
-                    neuralNetwork.setInputData(x0, x1, x2, x3);
+                    neuralNetwork.setInputData(x1, x2, x3, x4);
                     neuralNetwork.weights.AddRange(geneticAlgorithm.generation);
                     neuralNetwork.InitializeHiddenLayer(i);
                     neuralNetwork.InitializeOutputData(i);
@@ -519,14 +519,14 @@ namespace CarRacingGameWithGeneticAlgorithm
             endText6.BackColor = Color.Transparent;
             endText1.Font = new Font("Impact", 20);
             endText2.Font = new Font("Impact", 15);
-            endText3.Font = new Font("Impact", 8);
+            endText3.Font = new Font("Impact", 7);
             endText4.Font = new Font("Impact", 3);
             endText5.Font = new Font("Impact", 6);
             endText6.Font = new Font("Impact", 12);
             endText1.Text = iterationNumber + ". iteration\r\n";
             endText2.Text = "Current population:\r\n";
             endText3.Text = "Nr.         w0        w1        w2        w3        w4        " +
-                "w5        w6        w7        w8        w9        w10        w11   Fitness\r\n";
+                "w5        w6        w7        w8        w9        w10        w11        w12    Fitness\r\n";
             endText4.Text = "_______________________________________________________________" +
                 "_________________________________________________________________________" +
                 "_______________________________________________________________________\r\n";
@@ -685,7 +685,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 for (int i = 0; i < 6; i++)
                 {
                     weightsString = "";
-                    for (int j = i * 12; j < (i * 12 + 12); j++)
+                    for (int j = i * 13; j < (i * 13 + 13); j++)
                     {
                         weightsString += geneticAlgorithm.generation[j].ToString() + "  ";
                     }
@@ -740,10 +740,10 @@ namespace CarRacingGameWithGeneticAlgorithm
                 sw.WriteLine(geneticAlgorithm.PrintNextGenerationWeights(4));
                 sw.WriteLine(geneticAlgorithm.PrintNextGenerationWeights(5));
                 sw.WriteLine();
-                sw.WriteLine(neuralNetwork.PrintHiddenLayer(0));
                 sw.WriteLine(neuralNetwork.PrintHiddenLayer(1));
-                sw.WriteLine(neuralNetwork.PrintOutputLayer(0));
-                sw.WriteLine(neuralNetwork.PrintOutputLayer(1));
+                sw.WriteLine(neuralNetwork.PrintHiddenLayer(2));
+                sw.WriteLine(neuralNetwork.PrintOutputLayer());
+
                 sw.WriteLine();
 
             }

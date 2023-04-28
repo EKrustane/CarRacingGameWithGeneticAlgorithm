@@ -30,10 +30,10 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         public string PrintWeightsForChromosome(int i)
         {
-            string weightsString = i + ".                      ";
-            for (int j = (i * 12); j < ((i * 12) + 12); j++)
+            string weightsString = i + ".                     ";
+            for (int j = (i * 13); j < ((i * 13) + 13); j++)
             {
-                weightsString += weights[j].ToString() + "              ";
+                weightsString += weights[j].ToString() + "            ";
             }
             return weightsString; 
         }
