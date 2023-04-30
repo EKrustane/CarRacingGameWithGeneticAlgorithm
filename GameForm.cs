@@ -66,7 +66,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         private void InitializeGame()
         {
             iterationNumber = 0;
-            //adjust game form size
+
             this.Size = new Size(900, 825);
 
             //add start picture
