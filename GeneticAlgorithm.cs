@@ -229,7 +229,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             for(int i = 0; i < 12; i++)
             {
                 double k = RandomNumber();
-                if(k <= 0.3)
+                if(k <= 0.1)
                 {
                     int loc = CrossoverLocation();
                     generation[i * 16 + loc] = RandomNumber();
@@ -298,7 +298,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 }
                 if (selection >= 0.5 && selection <= 0.583)
                 {
-                    for (int j =96; j < 112; j++)
+                    for (int j = 96; j < 112; j++)
                     {
                         weights1.Add(generation[j]);
                     }
