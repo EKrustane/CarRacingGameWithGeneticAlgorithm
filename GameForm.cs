@@ -1,4 +1,10 @@
-﻿using System;
+﻿/// *************************************************************************************************************
+/// Autore: Ermīne Krustāne (RTU DITF IT 3. kurss 1. grupa)
+/// Bakalaura darba "Ģenētiskā algoritma izpēte spēles labākās iziešanas stratēģijas meklēsanai" praktiskā daļa.
+/// Spēles "Car Racing Game" neirona tīkla optimizēšana, izmantojot ģenētisko algoritmu.
+/// *************************************************************************************************************
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,8 +26,6 @@ namespace CarRacingGameWithGeneticAlgorithm
         private Score score = new Score();
         private Obstacle obstacle;
         private List<Obstacle> obstacles = new List<Obstacle>();
-        private GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
-        private NeuralNetwork neuralNetwork = new NeuralNetwork();
         private Button buttonStart = new Button();
         private Button buttonNew = new Button();
         private Button buttonNext = new Button();
@@ -34,29 +38,19 @@ namespace CarRacingGameWithGeneticAlgorithm
         private int obstacleCount = 1;
         private Random rand = new Random();
 
-
-
         public CarRacingGame()
         {
             InitializeComponent();
             KeyPreview = true;
             InitializeGame();
-            //InitializeMainTimer();
         }
 
         private void InitializeGame()
         {
-            //adjust game form size
             this.Size = new Size(615, 825);
-
-            //add start picture
             InitializeStartPicture();
-
-            //add game elements, when Start button is clicked
             InitializeIfButtonIsClickedTimer();
-
         }
-
 
         private void InitializeStartPicture()
         {
@@ -69,6 +63,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             startPicture.Image = (Image)Properties.Resources.ResourceManager.GetObject("start_picture");
             ButtonStart();
         }
+
         private void ButtonStart()
         {
             buttonStart.Parent = startPicture;
@@ -96,7 +91,6 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         private void InitializeIfButtonIsClickedTimer()
         {
-
             ifButtonIsClickedTimer = new Timer();
             ifButtonIsClickedTimer.Tick += IfButtonIsClickedTimer_Tick;
             ifButtonIsClickedTimer.Interval = 1;
@@ -110,9 +104,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 ifButtonIsClickedTimer.Stop();
                 VisibleFalse();
                 AddGameElements();
-                
             }
-
         }
 
         private void AddGameElements()
@@ -122,11 +114,8 @@ namespace CarRacingGameWithGeneticAlgorithm
             AddVehicle();
             AddScore();
             AddObstacle();
-            AddGeneticAlgorithm();
-            AddNeuralNetwork();
             InitializeMainTimer();
             InitializeObstacleTimer();
-
         }
         private void InitializeMainTimer()
         {
@@ -175,29 +164,6 @@ namespace CarRacingGameWithGeneticAlgorithm
             score.BringToFront();
         }
 
-        private void AddGeneticAlgorithm()
-        {
-
-        }
-
-        private void AddNeuralNetwork()
-        {
-            int x0, x1, x2, x3;
-            x0 = area.Width - 30 - (vehicle.Location.X + vehicle.Width);
-            x1 = vehicle.Location.X + 30;
-            x2 = vehicle.Location.Y - (obstacle.Location.Y + obstacle.Height);
-            x3 = vehicle.Location.X - (obstacle.Location.X + obstacle.Width);
-            if (x3 < 0)
-            {
-                x3 = obstacle.Location.X - (vehicle.Location.X + vehicle.Width);
-                if (x3 < 0)
-                {
-                    x3 = 0;
-                }
-            }
-            neuralNetwork.setInputData(x0, x1, x2, x3);
-        }
-
         private void AddObstacle()
         {
             
@@ -212,6 +178,11 @@ namespace CarRacingGameWithGeneticAlgorithm
             }
         }
 
+        /// <summary>
+        /// Metode, kura nodrošina transporta kustību, izmantojot tastatūras labo un kreiso taustiņu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Game_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -228,7 +199,6 @@ namespace CarRacingGameWithGeneticAlgorithm
                     break;
             }
         }
-
 
         private void UpdateScore()
         {
@@ -369,7 +339,5 @@ namespace CarRacingGameWithGeneticAlgorithm
             this.Close();
         }
     }
-
-
 
 }
