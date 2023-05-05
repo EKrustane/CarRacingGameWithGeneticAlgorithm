@@ -8,8 +8,14 @@ using System.Drawing;
 
 namespace CarRacingGameWithGeneticAlgorithm
 {
-    class Obstacle:PictureBox
+    /// <summary>
+    /// Klase nodrošina spēles šķēršļa izskatu
+    /// </summary>
+    class Obstacle :PictureBox
     {
+        /// <summary>
+        /// Šķēršļa kustības elementu definēšana
+        /// </summary>
         public int Step { get; set; } = 5;
         public int VerticalControl { get; set; } = 0;
 
@@ -18,6 +24,9 @@ namespace CarRacingGameWithGeneticAlgorithm
             InitializeObstacle();
         }
 
+        /// <summary>
+        /// Metode, kura inicializē šķērsli
+        /// </summary>
         private void InitializeObstacle()
         {
             this.Image = (Image)Properties.Resources.ResourceManager.GetObject("obstacle");
@@ -26,6 +35,9 @@ namespace CarRacingGameWithGeneticAlgorithm
             this.Name = "Obstacle";
         }
 
+        /// <summary>
+        /// Metode, kura sagatavo klasi nākamajai iterācijai
+        /// </summary>
         public void NextIteration()
         {
             Step = 0;

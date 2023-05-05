@@ -9,42 +9,45 @@ using System.Drawing;
 
 namespace CarRacingGameWithGeneticAlgorithm
 {
-
+    /// <summary>
+    /// Spēles klase, kura nodrošina ģenētiskā algoritma funkcionalitāti
+    /// </summary>
     class GeneticAlgorithm
     {
-        //Chromosome chromosome = new Chromosome();
+        /// <summary>
+        /// Ģenētiskā algoritma elementu definēšana
+        /// </summary>
         public ArrayList generation = new ArrayList();
         public ArrayList genW = new ArrayList();
-        private List<int> genF = new List<int>();
         public ArrayList nextGeneration = new ArrayList();
+        public ArrayList weightsForSelection = new ArrayList();
+        private ArrayList weights1 = new ArrayList();
+        private List<int> genF = new List<int>();
         public List<int> fitness = new List<int>();
         public List<int> numbers = new List<int>();
         public List<int> fitnessForSelection = new List<int>();
-        public ArrayList weightsForSelection = new ArrayList();
-        private ArrayList weights1 = new ArrayList();
         private Random rand = new Random();
         private double selection = 0;
-        //private int iterationNumber;
         public double[] w = new double[16];
 
         public GeneticAlgorithm()
         {
-            InitializeGeneticAlgorithm();
+
         }
 
-        public void InitializeGeneticAlgorithm()
-        {
-            //Selection();
-            //Crossover();
-        }
-
-
-
+        /// <summary>
+        /// Metode, kura ģenerē gadījuma skaitli, kuru noapaļo līdz 3 cipariem aiz komata
+        /// </summary>
+        /// <returns> Gadījuma veida daļskaitlis </returns>
         public double RandomNumber()
         {
             return Math.Round(rand.NextDouble(), 3);
         }
 
+        /// <summary>
+        /// Metode nodrošina intervālu piešķiršanu katram indivīdam un to ievietošanu sarakstā, 
+        /// ja tie tika izvēlēti
+        /// </summary>
         public void IntervalsForSelection()
         {
             for(int i = 0; i < 12; i++)
@@ -59,7 +62,6 @@ namespace CarRacingGameWithGeneticAlgorithm
                         weights1.Add(generation[j]);   
                     }
                     weightsForSelection.AddRange(weights1);
-                    //MessageBox.Show(weightsForSelection[5].ToString());
                     weights1.Clear();
                 }
                 else if (selection > 0.167 && selection <= 0.333)
@@ -118,13 +120,16 @@ namespace CarRacingGameWithGeneticAlgorithm
                     weights1.Clear();
                 }
             }
-
+            //Pēc intervālu noteikšanas, tiek izsaukta selekcijas operatora metode
             Selection();
         }
 
+        /// <summary>
+        /// Metode nodrošina selekcijas operatora izpildi, salīdzinot katra indivīda piemērotību 
+        /// ar nākamā indivīda piemērotību, ierakstot vērtības sarakstā, kas domāts krustošanai
+        /// </summary>
         public void Selection()
         {
-
             for (int j = 0; j < 12; j = j + 2)
             {
                 if (fitnessForSelection[j] >= fitnessForSelection[j + 1])
@@ -136,7 +141,6 @@ namespace CarRacingGameWithGeneticAlgorithm
                     genW.AddRange(weights1);
                     genF.Add(fitnessForSelection[j]);
                     weights1.Clear();
-                    //MessageBox.Show(genW[5].ToString());
                 }
                 else
                 {
@@ -151,6 +155,10 @@ namespace CarRacingGameWithGeneticAlgorithm
             }
         }
 
+        /// <summary>
+        /// Nosaka vietu, kur notiks krustošana
+        /// </summary>
+        /// <returns> Vesels skaitlis no 0 līdz 5 </returns>
         public int CrossoverLocation()
         {
             double r = RandomNumber();
@@ -182,6 +190,9 @@ namespace CarRacingGameWithGeneticAlgorithm
             return number;
         }
 
+        /// <summary>
+        /// Metode nodrošina krustošanas operatora darbības katram pārim
+        /// </summary>
         public void Crossover()
         {
             object gen;
@@ -189,7 +200,6 @@ namespace CarRacingGameWithGeneticAlgorithm
             int k = CrossoverLocation() + 6;
             for(int i = j; i <= k; i++)
             {
-                
                 gen = genW[i];
                 genW[i] = genW[i + 16];
                 genW[i + 16] = gen;
@@ -212,18 +222,19 @@ namespace CarRacingGameWithGeneticAlgorithm
                 genW[m] = genW[m + 16];
                 genW[m + 16] = gen;
             }
-            
         }
 
-
+        /// <summary>
+        /// Metode, kura pievieno visus (gan sākotnējos indivīdus, gan pēcnācējus) indivīdus sarakstā
+        /// </summary>
         public void AllToList()
         {
-            //for (int i = 0; i < 72; i++)
-            //{
-                generation.AddRange(genW);
-            //}
+            generation.AddRange(genW);
         }
 
+        /// <summary>
+        /// Metode, kura nodrošina mutācijas selekcijas un mutācijas darbības
+        /// </summary>
         public void Mutation()
         {
             for(int i = 0; i < 12; i++)
@@ -237,6 +248,9 @@ namespace CarRacingGameWithGeneticAlgorithm
             }
         }
 
+        /// <summary>
+        /// Metode, kura nodrošina selekciju, lai izveidotu nākamo paaudzi
+        /// </summary>
         public void SelectionToNextGeneration()
         {
             for (int i = 0; i < 6; i++)
@@ -353,52 +367,80 @@ namespace CarRacingGameWithGeneticAlgorithm
             }
         }
 
-        public string PrintWeightsAfterCrossover(int i)
+        /// <summary>
+        /// Pārveido svaru sarakstu pēc krustošanas simbolu virknē
+        /// </summary>
+        /// <param name="num"> Transporta numurs </param>
+        /// <returns> Simbolu virkni ar konkrētā transporlīdzekļa svariem </returns>
+        public string PrintWeightsAfterCrossover(int num)
         {
             string weightsString = "";
-            for (int j = i * 16; j < (i * 16 + 16); j++)
+            for (int j = num * 16; j < (num * 16 + 16); j++)
             {
                 weightsString += genW[j].ToString() + "  ";
             }
             return weightsString;
         }
 
-        public string PrintWeightsAfterMutation(int i)
+        /// <summary>
+        /// Pārveido svaru sarakstu pēc mutācijas simbolu virknē
+        /// </summary>
+        /// <param name="num"> Transporta numurs </param>
+        /// <returns> Simbolu virkni ar konkrētā transporlīdzekļa svariem </returns>
+        public string PrintWeightsAfterMutation(int num)
         {
             string weightsString = "";
-            for (int j = i * 16; j < (i * 16 + 16); j++)
+            for (int j = num * 16; j < (num * 16 + 16); j++)
             {
                 weightsString += generation[j].ToString() + "  ";
             }
             return weightsString;
         }
 
-        public string PrintNextGenerationWeights(int i)
+        /// <summary>
+        /// Pārveido nākamās paaudzes svaru sarakstu simbolu virknē
+        /// </summary>
+        /// <param name="num"> Transporta numurs </param>
+        /// <returns> Simbolu virkni ar konkrētā transporlīdzekļa svariem </returns>
+        public string PrintNextGenerationWeights(int num)
         {
             string weightsString = "";
-            for (int j = i * 16; j < (i * 16 + 16); j++)
+            for (int j = num * 16; j < (num * 16 + 16); j++)
             {
                 weightsString += nextGeneration[j].ToString() + "  ";
             }
             return weightsString;
         }
 
-        public string PrintWeightsForSelection(int i)
+        /// <summary>
+        /// Pārveido svaru sarakstu selekcijai simbolu virknē
+        /// </summary>
+        /// <param name="num"> Transporta numurs </param>
+        /// <returns> Simbolu virkni ar konkrētā transporlīdzekļa svariem </returns>
+        public string PrintWeightsForSelection(int num)
         {
             string weightsString = "";
-            for (int j = i * 16; j < (i * 16 + 16); j++)
+            for (int j = num * 16; j < (num * 16 + 16); j++)
             {
                 weightsString += weightsForSelection[j].ToString() + "  ";
             }
             return weightsString;
         }
 
-        public string PrintFitnessForSelection(int i)
+        /// <summary>
+        /// Pārveido piemērotības sarakstu selekcijai simbolu virknē
+        /// </summary>
+        /// <param name="num"> Transporta numurs </param>
+        /// <returns> Simbolu virkni ar konkrētā transporlīdzekļa piemērotību </returns>
+        public string PrintFitnessForSelection(int num)
         {
-            string fitnessString = fitnessForSelection[i].ToString();
+            string fitnessString = fitnessForSelection[num].ToString();
             return fitnessString;
         }
 
+        /// <summary>
+        /// Notīra visus klases sarakstus
+        /// </summary>
         public void NextIteration()
         {
             generation.Clear();

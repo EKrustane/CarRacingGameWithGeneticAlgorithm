@@ -38,6 +38,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Location = new System.Drawing.Point(100, 100);
             this.Name = "CarRacingGame";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Car Racing Game with Genetic Algorithm";
             this.ResumeLayout(false);
 

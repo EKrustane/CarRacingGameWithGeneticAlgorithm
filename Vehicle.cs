@@ -8,8 +8,14 @@ using System.Drawing;
 
 namespace CarRacingGameWithGeneticAlgorithm
 {
+    /// <summary>
+    /// Klase nodrošina spēles transporta izskatu
+    /// </summary>
     public class Vehicle : PictureBox
     {
+        /// <summary>
+        /// Transporta kustības elementu definēšana
+        /// </summary>
         public int Step { get; set; } = 20;
         public int HorizontalControl { get; set; } = 0;
 
@@ -18,6 +24,9 @@ namespace CarRacingGameWithGeneticAlgorithm
             InitializeVehicle();
         }
 
+        /// <summary>
+        /// Metode, kura inicializē transportu
+        /// </summary>
         private void InitializeVehicle()
         {
             this.Image = (Image)Properties.Resources.ResourceManager.GetObject("car");
@@ -26,6 +35,9 @@ namespace CarRacingGameWithGeneticAlgorithm
             this.Name = "Car";
         }
 
+        /// <summary>
+        /// Metode, kura sagatavo klasi nākamajai iterācijai
+        /// </summary>
         public void NextIteration()
         {
             Step = 0;

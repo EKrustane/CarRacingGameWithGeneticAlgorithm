@@ -13,8 +13,14 @@ using System.IO;
 
 namespace CarRacingGameWithGeneticAlgorithm
 {
+    /// <summary>
+    /// Spēles klase, kura nodrošina neironu tīkla funkcionalitāti
+    /// </summary>
     class NeuralNetwork
     {
+        /// <summary>
+        /// Neironu tīkla elementu definēšana
+        /// </summary>
         public double[,] w = new double[6, 16];
         public double input0 { get; set; } = 1;
         public double input1 { get; set; } = 0;
@@ -26,39 +32,33 @@ namespace CarRacingGameWithGeneticAlgorithm
         public double hidden2 { get; set; } = 0;
         public double output0 { get; set; } = 0;
         public double output1 { get; set; } = 0;
-
-        public int iterationNumber;
         public ArrayList nextGeneration = new ArrayList();
         public ArrayList weights = new ArrayList();
-        //public GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
-
-        Random rand = new Random();
+        private Random rand = new Random();
         public bool right = false;
+        public int iterationNumber;
 
         public NeuralNetwork()
         {
-            InitializeNeuralNetwork();
+
         }
 
-        private void InitializeNeuralNetwork()
-        {
-            //InitializeWeights();
-            //InitializeHiddenLayer();
-            //InitializeOutputData();
-        }
-
+        /// <summary>
+        /// Metode, kura saņem iterācijas numura vērtību no galvenās klases un piešķir savas klases mainīgajam
+        /// </summary>
+        /// <param name="iterNum"> Iterācijas numurs </param>
         public void GetIterationNumber(int iterNum)
         {
             iterationNumber = iterNum;
         }
 
-        public void GetNextIterationWeights(ArrayList nextGen)
-        {
-            nextGeneration.AddRange(nextGen);
-        }
-
+        /// <summary>
+        /// Metode, kura inicializē svarus neironu tīklam
+        /// </summary>
         public void InitializeWeights()
         {
+            //Notiek pārbaude, vai jāizveido jauni svari ar gadījuma skaitļiem, vai arī tie tiek piešķirti
+            //no ģenētiskā algoritma klases
             if(iterationNumber == 0)
             {
                 for (int i = 0; i < 6; i++)
@@ -67,7 +67,6 @@ namespace CarRacingGameWithGeneticAlgorithm
                     {
                         w[i, j] = rand.NextDouble();
                         w[i, j] = Math.Round(w[i, j], 3);
-                        //weights.Add(w[i, j]);
                     }
                 }
             }
@@ -79,12 +78,18 @@ namespace CarRacingGameWithGeneticAlgorithm
                     {
                         double [] n = (double[])nextGeneration.ToArray(typeof(double));
                         w[i, j] = n[i * 16 + j];
-                        //weights.Add(w[i, j]);
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Metode, kura inicializē neironu tīkla ieejas signālus no galvenās klases
+        /// </summary>
+        /// <param name="x1"> Attālums no labās spēles malas līdz transportam </param>
+        /// <param name="x2"> Attālums no kreisās spēles malas līdz transportam </param>
+        /// <param name="x3"> Attālums no šķērslim līdz transportam vertikāli </param>
+        /// <param name="x4"> Attālums no šķērslim līdz transportam horizontāli </param>
         public void setInputData(double x1, double x2, double x3, double x4)
         {
             input1 = x1;
@@ -93,25 +98,36 @@ namespace CarRacingGameWithGeneticAlgorithm
             input4 = x4;
         }
 
-        public void InitializeHiddenLayer(int j)
+        /// <summary>
+        /// Metode, kura nodrošina neironu tīkla slēptā slāņa aprēķināšanu
+        /// </summary>
+        /// <param name="num"> Transporta numurs </param>
+        public void InitializeHiddenLayer(int num)
         {
             double s1, s2;
             double[] n = (double[])weights.ToArray(typeof(double));
-            s1 = input0 * n[j * 16 + 0] + input1 * n[j * 16 + 2] + input2 * n[j * 16 + 4] + input3 * n[j * 16 + 6] + input4 * n[j * 16 + 8];
-            s2 = input0 * n[j * 16 + 1] + input1 * n[j * 16 + 3] + input2 * n[j * 16 + 5] + input3 * n[j * 16 + 7] + input4 * n[j * 16 + 9];
+            s1 = input0 * n[num * 16 + 0] + input1 * n[num * 16 + 2] + input2 * n[num * 16 + 4] + 
+                input3 * n[num * 16 + 6] + input4 * n[num * 16 + 8];
+            s2 = input0 * n[num * 16 + 1] + input1 * n[num * 16 + 3] + input2 * n[num * 16 + 5] + 
+                input3 * n[num * 16 + 7] + input4 * n[num * 16 + 9];
             hidden1 = 1 / (1 + Math.Exp(-s1/1000));
             hidden2 = 1 / (1 + Math.Exp(-s2/1000));
         }
 
-        public void InitializeOutputData(int j)
+        /// <summary>
+        /// Metode, kura nodrošina neironu tīkla izejas slāņa izeju aprēķināšanu
+        /// </summary>
+        /// <param name="num"> Transporta numurs </param>
+        public void InitializeOutputData(int num)
         {
             double s3, s4;
             double[] n = (double[])weights.ToArray(typeof(double));
-            s3 = hidden0 * n[j * 16 + 10] + hidden1 * n[j * 16 + 12] + hidden2 * n[j * 16 + 14];
-            s4 = hidden0 * n[j * 16 + 11] + hidden1 * n[j * 16 + 13] + hidden2 * n[j * 16 + 15];
+            s3 = hidden0 * n[num * 16 + 10] + hidden1 * n[num * 16 + 12] + hidden2 * n[num * 16 + 14];
+            s4 = hidden0 * n[num * 16 + 11] + hidden1 * n[num * 16 + 13] + hidden2 * n[num * 16 + 15];
             output0 = 1 / (1 + Math.Exp(-s3));
             output1 = 1 / (1 + Math.Exp(-s4));
 
+            //Notiek pārbaude, uz kuru pusi kustēsies transports
             if (output0 <= output1)
             {
                 right = true;
@@ -120,40 +136,14 @@ namespace CarRacingGameWithGeneticAlgorithm
             {
                 right = false;
             }
-           
         }
 
-        public string PrintHiddenLayer(int i)
-        {
-            string hidden = "";
-            if (i == 1)
-            {
-                hidden = "Hidden1 = " + hidden1.ToString();
-            }
-            else
-            {
-                hidden = "Hidden2 = " + hidden2.ToString();
-            }
-            return hidden;
-        }
-        public string PrintOutputLayer(int i)
-        {
-            string output = "";
-            if (i == 0)
-            {
-                output = "Output0 = " + output0.ToString();
-            }
-            else
-            {
-                output = "Output1 = " + output1.ToString();
-            }
-            return output;
-        }
-
+        /// <summary>
+        /// Metode, kura attīra sarakstu
+        /// </summary>
         public void NextIteration()
         {
             weights.Clear();
-
         }
 
 

@@ -1,4 +1,12 @@
-﻿using System;
+﻿
+/// *************************************************************************************************************
+/// Autore: Ermīne Krustāne (RTU DITF IT 3. kurss 1. grupa)
+/// Bakalaura darba "Ģenētiskā algoritma izpēte spēles labākās iziešanas stratēģijas meklēsanai" praktiskā daļa.
+/// Spēles "Car Racing Game" neirona tīkla optimizēšana, izmantojot ģenētisko algoritmu.
+/// *************************************************************************************************************
+
+
+using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.ComponentModel;
@@ -10,73 +18,76 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
-
 namespace CarRacingGameWithGeneticAlgorithm
 {
+    /// <summary>
+    /// Spēles galvenā klase, kura nodrošina visu funkcionalitāšu kopumu
+    /// </summary>
     public partial class CarRacingGame : Form
     {
+        /// <summary>
+        /// Spēles elementu definēšana
+        /// </summary>
         private PictureBox startPicture = new PictureBox();
         private PictureBox endPicture = new PictureBox();
         private Area area = new Area();
         private Vehicle vehicle;
-        private List<Vehicle> vehicles = new List<Vehicle>();
         public Chromosome chromosome;
-        public List<Chromosome> chromosomes = new List<Chromosome>();
         private Score score = new Score();
         private Obstacle obstacle;
-        private List<Obstacle> obstacles = new List<Obstacle>();
         private GeneticAlgorithm geneticAlgorithm;
         private NeuralNetwork neuralNetwork;
+        private List<Vehicle> vehicles = new List<Vehicle>();
+        public List<Chromosome> chromosomes = new List<Chromosome>();
+        private List<Obstacle> obstacles = new List<Obstacle>();
         private List<NeuralNetwork> neuralNetworks = new List<NeuralNetwork>();
+        private List<int> vehicleNumbers = new List<int>();
         private Button buttonStart = new Button();
         private Button buttonNew = new Button();
         private Button buttonNext = new Button();
         private Button buttonClose = new Button();
-        private bool buttonStartClick = false;
         private Timer ifButtonIsClickedTimer = null;
         private Timer mainTimer = null;
-        private Timer scoreTimer = null;
-        private List<Timer> scoreTimers = new List<Timer>();
         private Timer obstacleTimer = null;
         private Timer neuralNetworkTimer = null;
-        private int obstacleCount = 1;
+        private Timer scoreTimer = null;
+        private List<Timer> scoreTimers = new List<Timer>();
         private Random rand1 = new Random();
         private Random rand2 = new Random();
-        private int vehicleNumber;
-        public int iterationNumber;
-        private List<int> vehicleNumbers = new List<int>();
         private Label endText1 = new Label();
         private Label endText2 = new Label();
         private Label endText3 = new Label();
         private Label endText4 = new Label();
         private Label endText5 = new Label();
         private Label endText6 = new Label();
-        //public ArrayList weights = new ArrayList();
-        StreamWriter sw = new StreamWriter("C:\\Users\\Ermīne\\source\\repos\\CarRacingGameWithGeneticAlgorithm\\Rezults.txt");
+        StreamWriter sw = new StreamWriter("C:\\Users\\Ermīne\\source\\repos\\CarRacingGameWithGeneticAlgorithm\\Results.txt");
         StreamWriter eksp = new StreamWriter("C:\\Users\\Ermīne\\Desktop\\Svarīgi\\Dokumenti\\RTU nodarbības\\3.kurss_2.semestris\\Bakalaura_darbs\\eksperimenti.csv");
-        public int check = 0;
+        private bool buttonStartClick = false;
+        private int obstacleCount = 1;
+        private int vehicleNumber;
+        public int iterationNumber;
+        public int check = 0; 
 
         public CarRacingGame()
         {
             InitializeComponent();
-            KeyPreview = true;
             InitializeGame();
         }
 
+        /// <summary>
+        /// Spēles inicializēšana
+        /// </summary>
         private void InitializeGame()
         {
             iterationNumber = 0;
-
             this.Size = new Size(900, 825);
-
-            
             InitializeStartPicture();
-
-            
             InitializeIfButtonIsClickedTimer();
-
         }
 
+        /// <summary>
+        /// Sākuma bildes izveide
+        /// </summary>
         private void InitializeStartPicture()
         {
             this.Controls.Add(startPicture);
@@ -88,6 +99,10 @@ namespace CarRacingGameWithGeneticAlgorithm
             startPicture.Image = (Image)Properties.Resources.ResourceManager.GetObject("start_picture1");
             ButtonStart();
         }
+
+        /// <summary>
+        /// Sākuma pogas izveide
+        /// </summary>
         private void ButtonStart()
         {
             buttonStart.Parent = startPicture;
@@ -107,12 +122,9 @@ namespace CarRacingGameWithGeneticAlgorithm
             buttonStartClick = true;
         }
 
-        private void VisibleFalse()
-        {
-            startPicture.Visible = false;
-            buttonStart.Visible = false;
-        }
-
+        /// <summary>
+        /// IfButtonIsClicked taimera inicializēšana
+        /// </summary>
         private void InitializeIfButtonIsClickedTimer()
         {
 
@@ -122,32 +134,44 @@ namespace CarRacingGameWithGeneticAlgorithm
             ifButtonIsClickedTimer.Start();
         }
 
+        /// <summary>
+        /// Ja sākuma poga ir nospiesta, tad tiek izsaukta spēles elementu pievienošanas metode un taimeri
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void IfButtonIsClickedTimer_Tick(object sender, EventArgs e)
         {
             if (buttonStartClick)
             {
                 ifButtonIsClickedTimer.Stop();
-                VisibleFalse();
+                startPicture.Visible = false;
+                buttonStart.Visible = false;
                 AddGameElements();
-
                 InitializeMainTimer();
                 InitializeObstacleTimer();
             }
 
         }
 
+        /// <summary>
+        /// Tiek pievienoti spēles elementi
+        /// </summary>
         private void AddGameElements()
         {
             check = 0;
             AddArea();
             AddVehicle();
-            AddScore();
             AddObstacle();
+            AddScore();
             AddChromosomes();
             AddListOfVehicleNumbers();
             AddNeuralNetwork();
             InitializeScoreTimer();
         }
+
+        /// <summary>
+        /// Taimera mainTimer inicializācija
+        /// </summary>
         private void InitializeMainTimer()
         {
             mainTimer = new Timer();
@@ -156,12 +180,21 @@ namespace CarRacingGameWithGeneticAlgorithm
             mainTimer.Start();
         }
 
+        /// <summary>
+        /// Ar katru milisekundi tiks izsauktas šķēršļu pārvietošanās metode un pārbaude, vai mašīna 
+        /// ar šķērsli nav saskārušās
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainTimer_Tick(object sender, EventArgs e)
         {
             MoveObstacle();
             VehicleObstacleCollision();
         }
 
+        /// <summary>
+        /// scoreTimer inicializācija
+        /// </summary>
         private void InitializeScoreTimer()
         {
             for (int i = 0; i < 6; i++)
@@ -174,11 +207,19 @@ namespace CarRacingGameWithGeneticAlgorithm
             }
         }
 
+        /// <summary>
+        /// Ar katru milisekundi tiks izsaukta rezultātu atjaunošanas metode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ScoreTimer_Tick(object sender, EventArgs e)
         {
             UpdateScore();
         }
 
+        /// <summary>
+        /// obstacleTimer inicializācija
+        /// </summary>
         private void InitializeObstacleTimer()
         {
             obstacleTimer = new Timer();
@@ -187,31 +228,49 @@ namespace CarRacingGameWithGeneticAlgorithm
             obstacleTimer.Start();
         }
 
+        /// <summary>
+        /// Ar katru milisekundi tiks izsaukta šķēršļu pievienošanās metode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void obstacleTimer_Tick(object sender, EventArgs e)
         {
             AddObstacle();
         }
 
+        /// <summary>
+        /// neuralNetworkTimer inicializācija
+        /// </summary>
         private void InitializeNeuralNetworkTimer()
         {
             neuralNetworkTimer = new Timer();
             neuralNetworkTimer.Tick += neuralNetworkTimer_Tick;
             neuralNetworkTimer.Interval = 500;
             neuralNetworkTimer.Start();
-
         }
 
+        /// <summary>
+        /// Ar katru milisekundi tiks izsaukta transportu pievienošanās metode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void neuralNetworkTimer_Tick(object sender, EventArgs e)
         {
             MoveVehicle();
         }
 
+        /// <summary>
+        /// Tiek pievienota spēles vide
+        /// </summary>
         private void AddArea()
         {
             this.Controls.Add(area);
             area.Visible = true;
         }
 
+        /// <summary>
+        /// Tiek pievienoti 6 spēles transporti
+        /// </summary>
         private void AddVehicle()
         {
             for (int i = 0; i < 6; i++)
@@ -223,10 +282,12 @@ namespace CarRacingGameWithGeneticAlgorithm
                 vehicles[i].Parent = area;
                 vehicles[i].BringToFront();
                 vehicle.Visible = true;
-
             }
         }
 
+        /// <summary>
+        /// Tiek pievienoti spēles šķēršļi
+        /// </summary>
         private void AddObstacle()
         {
             for (int i = 0; i < obstacleCount; i++)
@@ -241,7 +302,9 @@ namespace CarRacingGameWithGeneticAlgorithm
             }
         }
 
-
+        /// <summary>
+        /// Tiek pievienota rezultātu etiķete
+        /// </summary>
         private void AddScore()
         {
             this.Controls.Add(score);
@@ -250,11 +313,17 @@ namespace CarRacingGameWithGeneticAlgorithm
             score.BringToFront();
         }
 
+        /// <summary>
+        /// Tiek pievienots ģenētiskais algoritms
+        /// </summary>
         private void AddGeneticAlgorithm()
         {
             geneticAlgorithm = new GeneticAlgorithm();
         }
 
+        /// <summary>
+        /// Tiek pievienota hromosoma
+        /// </summary>
         private void AddChromosomes()
         {
             for (int i = 0; i < 6; i++)
@@ -264,6 +333,9 @@ namespace CarRacingGameWithGeneticAlgorithm
             }
         }
 
+        /// <summary>
+        /// Tiek izveidots saraksts 6 elementu lielumā no transporta numuriem
+        /// </summary>
         private void AddListOfVehicleNumbers()
         {
             for (int i = 0; i < 6; i++)
@@ -272,6 +344,10 @@ namespace CarRacingGameWithGeneticAlgorithm
                 vehicleNumbers.Add(vehicleNumber);
             }
         }
+
+        /// <summary>
+        /// Tiek pievienots neironu tīkls, kur tiek inicializēti svari un pievienoti tie sarakstiem
+        /// </summary>
         private void AddNeuralNetwork()
         {
             if (iterationNumber == 0)
@@ -282,8 +358,6 @@ namespace CarRacingGameWithGeneticAlgorithm
             {
                 neuralNetwork = new NeuralNetwork();
                 neuralNetworks.Add(neuralNetwork);
-
-
             }
             neuralNetwork.nextGeneration.AddRange(geneticAlgorithm.nextGeneration);
             neuralNetwork.GetIterationNumber(iterationNumber);
@@ -302,6 +376,9 @@ namespace CarRacingGameWithGeneticAlgorithm
             InitializeNeuralNetworkTimer();
         }
 
+        /// <summary>
+        /// Metode nodrošina transporta kustību 6 elementiem, izmantojot neironu tīklu, nosakot to attālumus
+        /// </summary>
         private void MoveVehicle()
         {
             double x1 = 0, x2 = 0, x3 = 0, x4 = 0;
@@ -314,6 +391,7 @@ namespace CarRacingGameWithGeneticAlgorithm
                 for (int obstacleCounter = 0; obstacleCounter < obstacles.Count; obstacleCounter++)
                 {
                     obstacle = obstacles[obstacleCounter];
+                    //Tiek noskaidroti attalumi līdz konkrētajiem parametriem
                     x1 = area.Width - 50 - (vehicle.Location.X + vehicle.Width);
                     x2 = vehicle.Location.X - 50;
                     x3 = vehicle.Location.Y - (obstacle.Location.Y + obstacle.Height);
@@ -327,11 +405,13 @@ namespace CarRacingGameWithGeneticAlgorithm
                         }
                     }
 
+                    //Tiek izpildīts neironu tīkls
                     neuralNetwork.setInputData(x1, x2, x3, x4);
                     neuralNetwork.weights.AddRange(geneticAlgorithm.generation);
                     neuralNetwork.InitializeHiddenLayer(i);
                     neuralNetwork.InitializeOutputData(i);
 
+                    //Nodrošina transporta kustību vai nu pa labi, vai pa kreisi
                     switch (neuralNetwork.right)
                     {
                         case true:
@@ -348,11 +428,18 @@ namespace CarRacingGameWithGeneticAlgorithm
                 }
             }
         }
+
+        /// <summary>
+        /// Metode palielina spēles rezultātu par 1
+        /// </summary>
         private void UpdateScore()
         {
             score.UpdatingScore(1);
         }
 
+        /// <summary>
+        /// Metode nodrošina šķēršļa kustību
+        /// </summary>
         private void MoveObstacle()
         {
             foreach (var obstacle in obstacles)
@@ -362,6 +449,10 @@ namespace CarRacingGameWithGeneticAlgorithm
             }
         }
 
+        /// <summary>
+        /// Metode pārbauda, vai nav notikusi sadursme ar speles malām. Ja tā notiek, tad tiek izsaukta metode 
+        /// par viena transporta zaudēšanu
+        /// </summary>
         private void VehicleBorderCollision()
         {
             for (int i = 0; i < 6; i++)
@@ -381,6 +472,10 @@ namespace CarRacingGameWithGeneticAlgorithm
             }
         }
 
+        /// <summary>
+        /// Metode pārbauda, vai nav notikusi sadursme ar speles šķēršļiem. Ja tā notiek, tad tiek izsaukta metode 
+        /// par viena transporta zaudēšanu
+        /// </summary>
         private void VehicleObstacleCollision()
         {
             for (int i = 0; i < 6; i++)
@@ -397,61 +492,66 @@ namespace CarRacingGameWithGeneticAlgorithm
                         }
                     }
                 }
-
-
             }
         }
 
-        private void GameOverForOneVehicle(int i)
+        /// <summary>
+        /// Metode nodrošina darbības, kas notiek, kad viens transports zaudē
+        /// </summary>
+        /// <param name="vehicleNum"> Transporta, kurš zaudēja, numurs </param>
+        private void GameOverForOneVehicle(int vehicleNum)
         {
-            vehicles[i].Visible = false;
-            vehicleNumbers.Add(i);
+            vehicles[vehicleNum].Visible = false;
+            vehicleNumbers.Add(vehicleNum);
             geneticAlgorithm.nextGeneration.Clear();
             neuralNetwork.nextGeneration.Clear();
 
-
-            if (i == 0)
+            //Tiek pārbaudīts, kurš transports zaudēja, apstādinot tā rezultāta taimeri,
+            //ierakstot hromosomā kā piemērotību un pievienojot to sarakstā
+            if (vehicleNum == 0)
             {
                 scoreTimers[0].Stop();
                 chromosomes[0].Fitness = score.ScoreNumber;
                 chromosome.AddFitnessToList(chromosomes[0].Fitness);
             }
 
-            if (i == 1)
+            if (vehicleNum == 1)
             {
                 scoreTimers[1].Stop();
                 chromosomes[1].Fitness = score.ScoreNumber;
                 chromosome.AddFitnessToList(chromosomes[1].Fitness);
             }
 
-            if (i == 2)
+            if (vehicleNum == 2)
             {
                 scoreTimers[2].Stop();
                 chromosomes[2].Fitness = score.ScoreNumber;
                 chromosome.AddFitnessToList(chromosomes[2].Fitness);
             }
 
-            if (i == 3)
+            if (vehicleNum == 3)
             {
                 scoreTimers[3].Stop();
                 chromosomes[3].Fitness = score.ScoreNumber;
                 chromosomes[3].AddFitnessToList(chromosomes[3].Fitness);
             }
 
-            if (i == 4)
+            if (vehicleNum == 4)
             {
                 scoreTimers[4].Stop();
                 chromosomes[4].Fitness = score.ScoreNumber;
                 chromosome.AddFitnessToList(chromosomes[4].Fitness);
             }
 
-            if (i == 5)
+            if (vehicleNum == 5)
             {
                 scoreTimers[5].Stop();
                 chromosomes[5].Fitness = score.ScoreNumber;
                 chromosome.AddFitnessToList(chromosomes[5].Fitness);
             }
 
+            //Notiek pārbaude, vai visi transportlīdzekļi ir zaudējuši. Ja tas apstiprinās,
+            //tad tiek izsaukta spēles beigu metode
             if (vehicleNumbers.Contains(0) && vehicleNumbers.Contains(1) &&
                 vehicleNumbers.Contains(2) && vehicleNumbers.Contains(3) &&
                 vehicleNumbers.Contains(4) && vehicleNumbers.Contains(5))
@@ -460,11 +560,17 @@ namespace CarRacingGameWithGeneticAlgorithm
             }
         }
 
+        /// <summary>
+        /// Spēles beigu metode
+        /// </summary>
         public void GameOver()
         {
             InitializeEndPicture();
         }
 
+        /// <summary>
+        /// Metode inicializē spēles beigu attēlu, izsaucot beigu teksta metodi un pogu metodes
+        /// </summary>
         private void InitializeEndPicture()
         {
             this.Controls.Add(endPicture);
@@ -480,6 +586,9 @@ namespace CarRacingGameWithGeneticAlgorithm
             ButtonClose();
         }
 
+        /// <summary>
+        /// Metode nodrošina spēles rezultātu parādīšanu beigu ekrānā, ka arī nodrošina ģenētiskā algoritma sākumu
+        /// </summary>
         private void EndText()
         {
             this.Controls.Add(endText1);
@@ -542,6 +651,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             endText6.Text = "Max fitness: " + chromosome.MaxFitness() + "\r\n" + "Min fitness: " +
                 chromosome.MinFitness() + "\r\n" + "Average fitness: " + chromosome.AverageFitness();
 
+            //Tiek aktivizēts ģenētiskais algoritms
             for (int k = 0; k < 6; k++)
             {
                 geneticAlgorithm.fitness.Add(chromosomes[k].Fitness);
@@ -552,10 +662,15 @@ namespace CarRacingGameWithGeneticAlgorithm
             geneticAlgorithm.Mutation();
             geneticAlgorithm.SelectionToNextGeneration();
 
+            //Rezultāti tiek ierakstīti teksta failā (ģenētiskā algoritma darbības) un CSV failā
+            //(maksimālā piemērotība konkrētajā iterācijā)
             WriteInFile();
             WriteInCSVFile();
         }
 
+        /// <summary>
+        /// Pogas buttonNew definēšana
+        /// </summary>
         private void ButtonNew()
         {
             buttonNew.Parent = endPicture;
@@ -571,6 +686,9 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         }
 
+        /// <summary>
+        /// Pogas buttonNext definēšana
+        /// </summary>
         private void ButtonNext()
         {
             buttonNext.Parent = endPicture;
@@ -586,6 +704,9 @@ namespace CarRacingGameWithGeneticAlgorithm
             check += 1;
         }
 
+        /// <summary>
+        /// Pogas buttonClose definēšana
+        /// </summary>
         private void ButtonClose()
         {
             buttonClose.Parent = endPicture;
@@ -600,6 +721,12 @@ namespace CarRacingGameWithGeneticAlgorithm
             buttonClose.Click += buttonClose_Click;
         }
 
+        /// <summary>
+        /// Nospiežot pogu, lai sāktu jaunu spēli, tiek aizvērti teksta un CSV faili, apstādināti taimeri
+        /// un izsaukta metode, lai atsāktu jaunu spēli
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonNew_Click(object sender, EventArgs e)
         {
             sw.Close();
@@ -610,6 +737,12 @@ namespace CarRacingGameWithGeneticAlgorithm
             RestartGame();
         }
 
+        /// <summary>
+        /// Nospiežot pogu, lai sāktu jaunu iterāciju, tiek palielināts iterācijas numurs, izsauktas iterācijas,
+        /// kuras attīra visus sarakstus, pievienoti jauni elementi
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonNext_Click(object sender, EventArgs e)
         {
             if (check > 0)
@@ -626,6 +759,12 @@ namespace CarRacingGameWithGeneticAlgorithm
             }
         }
 
+        /// <summary>
+        /// Nospiežot pogu, lai aizvērtu spēli, tiek aizvērti teksta un CSV faili, apstādināti taimeri
+        /// un tiek aizvērta spēle
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonClose_Click(object sender, EventArgs e)
         {
             sw.Close();
@@ -636,12 +775,18 @@ namespace CarRacingGameWithGeneticAlgorithm
             this.Close();
         }
 
+        /// <summary>
+        /// Metode nodrošina spēles sākšanu no jauna
+        /// </summary>
         private void RestartGame()
         {
             System.Diagnostics.Process.Start(Application.ExecutablePath);
             this.Close();
         }
 
+        /// <summary>
+        /// Metode nodrošina visu sarakstu attīrīšanu un elementu noņemšanu no ekrāna
+        /// </summary>
         private void NextIteration()
         {
             endPicture.Visible = false;
@@ -655,29 +800,34 @@ namespace CarRacingGameWithGeneticAlgorithm
             endText5.Visible = false;
             endText6.Visible = false;
             area.Visible = false;
+
             for (int i = 0; i < vehicles.Count; i++)
             {
                 this.Controls.Remove(vehicles[i]);
                 vehicles[i].Visible = false;
                 vehicles[i].Dispose();
             }
+
             for (int j = 0; j < obstacles.Count; j++)
             {
                 this.Controls.Remove(obstacles[j]);
                 obstacles[j].Visible = false;
                 obstacles[j].Dispose();
             }
+
             this.Controls.Remove(area);
             this.Controls.Remove(score);
             vehicles.Clear();
             vehicleNumbers.Clear();
             chromosomes.Clear();
             scoreTimers.Clear();
-            //neuralNetworks.Clear();
             obstacles.Clear();
             neuralNetworkTimer.Stop();
         }
 
+        /// <summary>
+        /// Metode nodrošina ģenētiskā algoritma darbību ierakstīšanu teksta failā
+        /// </summary>
         private void WriteInFile()
         {
             try
@@ -744,10 +894,6 @@ namespace CarRacingGameWithGeneticAlgorithm
                 sw.WriteLine(geneticAlgorithm.PrintNextGenerationWeights(4));
                 sw.WriteLine(geneticAlgorithm.PrintNextGenerationWeights(5));
                 sw.WriteLine();
-                sw.WriteLine(neuralNetwork.PrintHiddenLayer(1));
-                sw.WriteLine(neuralNetwork.PrintHiddenLayer(2));
-                sw.WriteLine(neuralNetwork.PrintOutputLayer(0));
-                sw.WriteLine(neuralNetwork.PrintOutputLayer(1));
                 sw.WriteLine();
 
             }
@@ -760,6 +906,10 @@ namespace CarRacingGameWithGeneticAlgorithm
                 Console.WriteLine("Executing finally block.");
             }
         }
+
+        /// <summary>
+        /// Metode nodrošina maksimālās piemērotības ierakstīšanu CSV failā
+        /// </summary>
         private void WriteInCSVFile()
         {
             try
@@ -778,6 +928,4 @@ namespace CarRacingGameWithGeneticAlgorithm
 
         }
     }
-
-
 }
