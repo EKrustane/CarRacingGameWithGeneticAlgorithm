@@ -69,10 +69,10 @@ namespace CarRacingGameWithGeneticAlgorithm
 
             this.Size = new Size(900, 825);
 
-            //add start picture
+            
             InitializeStartPicture();
 
-            //add game elements, when Start button is clicked
+            
             InitializeIfButtonIsClickedTimer();
 
         }
