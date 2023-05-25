@@ -29,6 +29,7 @@ namespace CarRacingGameWithGeneticAlgorithm
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CarRacingGame));
             this.SuspendLayout();
             // 
             // CarRacingGame
@@ -36,6 +37,7 @@ namespace CarRacingGameWithGeneticAlgorithm
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Location = new System.Drawing.Point(100, 100);
             this.Name = "CarRacingGame";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
